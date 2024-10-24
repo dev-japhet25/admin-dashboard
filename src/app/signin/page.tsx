@@ -41,7 +41,7 @@ const SignIn = () => {
         const userData = userDoc.data();
         localStorage.setItem("userCommands", JSON.stringify(userData.commands));
         localStorage.setItem("username", encrypt(userData.username));  
-        await router.push(callbackUrl);
+        router.push(callbackUrl);
         await toast.success("Logged in successfully");
       } else {
         toast.error("User document does not exist. Please contact support.");

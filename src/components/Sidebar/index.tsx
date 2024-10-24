@@ -86,7 +86,7 @@ export default function SideBar() {
 
   return (
     <>
-      <div className="bg-white w-full h-[50px] flex justify-center">
+      <div className="bg-blue-900 w-full h-[50px] flex justify-center">
         <Image
           src="/logo.png"
           alt="Asoriba Logo"

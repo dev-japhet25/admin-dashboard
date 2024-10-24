@@ -1,36 +1,42 @@
 "use client";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import useAutoLogout from "@/lib/hooks/useAutoLogout";
 import { onAuthStateChanged } from "firebase/auth";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { auth } from "../../../firebase.config";
-import useAutoLogout from "@/lib/hooks/useAutoLogout";
+import ImageLoader from "../Loader/Loader";
+
 
 function DefaultLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  useAutoLogout();
   const { setCallbackUrl } = useAutoLogout();
-  const [currentPath, setCurrentPath] = useState("/");
-  const pathname = usePathname();
-
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const path = window.location.pathname;
-      setCurrentPath(path);
-      setCallbackUrl(path);
+    const isLocalStorageEmpty = localStorage.length === 0;
+
+    if (isLocalStorageEmpty) {
+      router.push("/signin");
+      return;
     }
-  }, []); 
-
-  useEffect(() => {
+    
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        router.push("/signin"); // Redirect to login if not authenticated
+        router.push("/signin");
+      } else {
+        setCallbackUrl(window.location.pathname);
+        setIsLoading(false);
       }
     });
+
     return () => unsubscribe();
-  }, [router]);
+  }, [router, setCallbackUrl])
+
+  if (isLoading) {
+    return <ImageLoader />;
+  }
   return (
     <div className="min-h-screen bg-white  overflow-hidden">
       <div className="flex">
