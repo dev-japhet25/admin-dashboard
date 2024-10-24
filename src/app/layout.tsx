@@ -1,0 +1,38 @@
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import '@/lib/css/globals.css';
+import { Toaster } from "react-hot-toast";
+
+
+const geistSans = localFont({
+  src: "../lib/fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "../lib/fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
+
+export const metadata: Metadata = {
+  title: "STRATA Dashboard",
+  description: "An Internal Dashboard for Strata employees",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {children}
+        <Toaster/>
+      </body>
+    </html>
+  );
+}
