@@ -12,7 +12,6 @@ const useAutoLogout = () => {
 
   useEffect(() => {
     const intervalId = setInterval(checkLogout, AUTO_CHECK_INTERVAL);
-    console.log("Interval started");
 
     const activityDetector = () => {
       setLastActivity(Date.now());

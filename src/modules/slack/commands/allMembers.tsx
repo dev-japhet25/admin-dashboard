@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Popover from '@/components/Popover';
-import Button from '@/components/Button';
+import Popover from "@/components/Popover";
+import Button from "@/components/Button";
 import { sendSlackCommand } from "@/lib/api";
 
 const AllMembersCommand = () => {
@@ -58,7 +58,8 @@ const AllMembersCommand = () => {
     );
 
     return {
-      message: messageLine?.split("downloadable")[0]?.trim()  || "No record found",
+      message:
+        messageLine?.split("downloadable")[0]?.trim() || "No record found",
       downloadLink: downloadLinkLine?.split("link")[1]?.trim() || null,
     };
   };

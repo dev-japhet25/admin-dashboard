@@ -11,7 +11,6 @@ import { Router } from "lucide-react";
 export default function Header() {
   const router = useRouter();
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const currentPath = window.location.pathname;
 
 
   const toggleDrawer = () => {

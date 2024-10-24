@@ -41,13 +41,13 @@ const SignIn = () => {
         const userData = userDoc.data();
         localStorage.setItem("userCommands", JSON.stringify(userData.commands));
         localStorage.setItem("username", encrypt(userData.username));  
-        router.push(callbackUrl);
+        await router.push(callbackUrl);
+        await toast.success("Logged in successfully");
       } else {
         toast.error("User document does not exist. Please contact support.");
       }
 
       setLoading(false);
-      toast.success("Logged in successfully");
     } catch (error: any) {
       setLoading(false);
       toast.error("Invalid email or password");

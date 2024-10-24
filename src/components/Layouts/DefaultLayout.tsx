@@ -2,8 +2,8 @@
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import { onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { auth } from "../../../firebase.config";
 import useAutoLogout from "@/lib/hooks/useAutoLogout";
 
@@ -11,11 +11,17 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   useAutoLogout();
   const { setCallbackUrl } = useAutoLogout();
-  const currentPath = window.location.pathname;
+  const [currentPath, setCurrentPath] = useState("/");
+  const pathname = usePathname();
+
 
   useEffect(() => {
-    setCallbackUrl(currentPath);
-  }, [currentPath]);
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      setCurrentPath(path);
+      setCallbackUrl(path);
+    }
+  }, []); 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -24,7 +30,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [router]);
   return (
     <div className="min-h-screen bg-white  overflow-hidden">
       <div className="flex">
