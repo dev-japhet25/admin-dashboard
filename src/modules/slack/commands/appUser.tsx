@@ -52,7 +52,6 @@ const AppUserCommand = () => {
     fields[key] = value;
   }
 
-  console.log('my fields ', fields)
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">

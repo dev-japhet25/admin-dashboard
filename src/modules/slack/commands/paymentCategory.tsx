@@ -37,7 +37,6 @@ const PaymentCategorySetup = () => {
       const response = await sendSlackCommand("/payment_category_setup", textCommand);
       setResponse(response);
       setOpen(true)
-      console.log('fgfgfg', response)
       if (response) {
         setLoading(false)
       }
@@ -73,8 +72,6 @@ const PaymentCategorySetup = () => {
 
   //check if the data has been parsed into an object
   let dataText = response.matchAll(/\*([\w\s]+)\*\s`([^`]+)`/g) ? extractText(response) : response;
-
-  console.log('ddd',extractText(response))
   function isObject(txt: any) {
     return txt !== null && typeof txt === 'object' && !Array.isArray(txt);
   }

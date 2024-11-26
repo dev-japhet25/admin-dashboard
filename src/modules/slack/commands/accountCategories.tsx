@@ -61,7 +61,7 @@ const AccountCategoriesCommand = () => {
     });
     return obj;
   });
-  console.log('ggg', filterData)
+
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">

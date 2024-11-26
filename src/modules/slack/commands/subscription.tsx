@@ -20,11 +20,11 @@ const SubscriptionCommand = () => {
   const text = "Subscription Details\nChurch: Kali Chaple\nOn Free Tier: Yes\nOn Trial Phase: Yes\nExpiry Date: Fri, 17 Jun 2022 01:18PM\nCurrent Church Size: 0\n\n\nAccount does not have any Subscription History";
   //split by new lines 
   const newLine = response.split("\n");
-  console.log('my line', newLine)
+ 
   const fields: { [key: string]: string } = {}
   //loop through the newLine
   newLine.forEach((val) => {
-    console.log('my val', val)
+   
     let [key, value] = val.split(":");
     if (key && value) {
       fields[key.trim()] = value.trim()
@@ -36,14 +36,14 @@ const SubscriptionCommand = () => {
     setOpen(false)
     setResponse("")
 }
-  console.log('my fields', fields)
+ 
   const handleSubmit = async () => {
     setLoading(true)
     try {
       const response = await sendSlackCommand("/subscription", branchId);
       setResponse(response);
       setOpen(true)
-      console.log('fgfgfg', response)
+     
       if (response) {
         setLoading(false)
       }

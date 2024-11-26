@@ -73,7 +73,7 @@ const ChurchesCommand = () => {
     // Send command to backend
     try {
       const result = await sendSlackCommand("/churches", commandText);
-      console.log(result);
+     
       if (result === "Please include account id of church in request") {
         setError("Please include account id of church in request");
       }else {

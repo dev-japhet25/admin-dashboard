@@ -59,7 +59,7 @@ const ResetPassword = () => {
       setResponseMessage("An error occurred while resetting the password.");
     }
   };
-  console.log('resp', responseMessage)
+
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">

@@ -63,7 +63,7 @@ const SetupChatbot = () => {
         }
     };
 
-    console.log('This is res',response,command)
+    
 
     let formatText = response.split('\n').filter((text)=> !text.includes("Status"));
 
@@ -78,7 +78,7 @@ const SetupChatbot = () => {
     })
        
       fields.message = 'Chatbot ' + formatText[3]
-    console.log('my fields',fields,formatText)
+    
     return (
         <div className="flex justify-center w-full">
             <div className="w-2/3">

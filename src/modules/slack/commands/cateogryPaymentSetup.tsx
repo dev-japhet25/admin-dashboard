@@ -57,7 +57,6 @@ const CategoryPaymentSetupCommand = () => {
     }
   };
 
-  console.log('This is the payment', response)
 
   let formatText = response.split("\n");
   let formattedData = formatText.slice(3).concat(formatText.slice(0, 1));

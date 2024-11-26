@@ -40,13 +40,13 @@ const UssdBranchesCommand = () => {
     }
   };
    
-  console.log('my response',response)
+  
   const branchNames = response?.match(/(?<=\*Branch\*\s).+/g);
 
   // Extract USSD codes
   const ussdCodes = response?.match(/(?<=\*USSD Code\*\s)\d+/g);
 
-  console.log(branchNames,ussdCodes)
+
  
 
   return (

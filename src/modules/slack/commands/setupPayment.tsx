@@ -45,7 +45,7 @@ const SetupPaymentCommand = () => {
     try {
       const response = await sendSlackCommand(command, slackCommand);
       setResponse(response);
-      console.log('This is the daaa', response)
+  
       if (response) {
         setOpen(true)
         setLoading(false)
@@ -67,14 +67,14 @@ const SetupPaymentCommand = () => {
     setOpen(false)
     setResponse("")
   }
-  console.log('my update', response)
+
   const formatText = response.split("\n").filter((value, index, arr) => {
     return value !== '--------------------------------------------' && value !== "";
   });
-  console.log('formatted', formatText)
+
   const fields: { [fields: string]: string } = {}
   formatText.forEach((val) => {
-    console.log('ggg', val)
+  
     let eachText = val.split(":")
     let [key, value] = eachText;
     fields[key.trim()] = value
@@ -84,7 +84,7 @@ const SetupPaymentCommand = () => {
   let formatActionA = action && action.split(" ").slice(0, 3).join(" ") + "\n"
   let formatActionB = action && action.split(" ").slice(3).join(" ")
   fields.Action = `${formatActionA} ${formatActionB}`
-  console.log('my fields', fields, formatActionA, "b", formatActionB)
+
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">

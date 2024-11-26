@@ -26,7 +26,6 @@ const BranchesCommand = () => {
       const response = await sendSlackCommand("/branches", churchId);
       setResponse(response);
       setLoading(false)
-      console.log(response)
       if (!response.includes(":")) {
         let message = response.split("*")[0]
         toast.error(message);

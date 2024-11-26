@@ -50,7 +50,7 @@ const SubscribeCommand = () => {
       const response = await sendSlackCommand("/subscribe", command);
       setResponse(response);
       setOpen(true)
-      console.log('This is the daaa', response)
+      
       if (response) {
         setLoading(false)
       }
@@ -71,7 +71,7 @@ const SubscribeCommand = () => {
     setOpen(false)
     setResponse("")
 }
-  console.log('This is the daaa', response)
+
 
   let formatText = response.split('\n');
   let fields: { [key: string]: string } = {}
@@ -89,7 +89,6 @@ const SubscribeCommand = () => {
 
   })
 
-  console.log('mine fields', fields)
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">

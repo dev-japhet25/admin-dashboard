@@ -24,7 +24,7 @@ const UssdCommand = () => {
       const response = await sendSlackCommand("/ussd", branchId);
       setResponse(response);
       setLoading(false)
-      console.log(response)
+     
       if(!response.includes("*")){
         toast.error(response)
         return;

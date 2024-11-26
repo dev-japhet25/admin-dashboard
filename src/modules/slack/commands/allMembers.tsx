@@ -57,7 +57,6 @@ const AllMembersCommand = () => {
       const result = await sendSlackCommand("/all_members", commandText);
       setOpen(true)
       setLoading(false)
-      console.log(result);
       setResponse(result);
     } catch (error: any) {
       setLoading(false)

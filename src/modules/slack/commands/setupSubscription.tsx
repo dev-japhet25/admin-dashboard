@@ -43,9 +43,9 @@ const SubscriptionSetupCommand = () => {
     }
   };
 
-  console.log(response)
+
   const formatData = response?.split("\n").slice(3).splice(0, 5)
-  console.log('my for', formatData)
+ 
 
   const results = formatData?.map((val, index) => {
     if (index === 0) {
@@ -70,7 +70,7 @@ const SubscriptionSetupCommand = () => {
     }
   })
 
-  console.log('my ffff', fields)
+ 
   const handleSubscriptionTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSubscriptionType(e.target.value);
   };

@@ -40,7 +40,7 @@ const Topup = () => {
             const response = await sendSlackCommand("/topup", command);
             setResponse(response);
             setOpen(true)
-            console.log('This is the daaa', response)
+            
             if (response) {
                 setLoading(false)
             }
@@ -57,7 +57,7 @@ const Topup = () => {
         }
     };
 
-    console.log('This is response', response)
+    
 
 
     const formatText = response.split("\n")
@@ -80,7 +80,7 @@ const Topup = () => {
             return text;
         }
     }).flatMap((val) => val).map((data, index) => index === 7 ? `id${data}` : index === 3 ? "Amount:".concat(data.split(" ")[data.split(" ").length - 1]) : data);
-    console.log('reee', reFormatText)
+ 
 
     reFormatText.forEach((val) => {
         let eachText = val.split(":")
