@@ -6,7 +6,7 @@ import { ResponseCard } from '@/components/ResponseCard';
 import toast from 'react-hot-toast';
 import { Modal } from '@/components/Modal/Modal';
 import ImageLoader from '@/components/Loader/Loader';
-import Image from 'next/image';
+
 
 
 const AppUserCommand = () => {
