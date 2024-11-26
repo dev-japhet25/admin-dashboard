@@ -98,7 +98,7 @@ const AppUserCommand = () => {
           <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
         {Object.keys(fields).length > 0 && (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="App User"
-          className="sm:w-[70%] max-w-[900px] md:max-w-[400px] md:ml-[40%]  lg:max-w-[940px] xl:max-w-[820px] lg:mt-20  lg:ml-[27.2%] xl:ml-[28%] mx-auto transform overflow-auto  rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8">
+          className="sm:w-[100%] max-w-[900px]  md:ml-[0%]  lg:max-w-[940px] xl:max-w-[820px] lg:mt-2  lg:ml-[1%] xl:ml-[1%] mx-auto transform overflow-auto  rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8">
           <ResponseCard entityKey={Object.keys(fields) || null} entityValue={Object.values(fields) || null} headerA='Title' headerB='Values' />
         </Modal>)}
 
