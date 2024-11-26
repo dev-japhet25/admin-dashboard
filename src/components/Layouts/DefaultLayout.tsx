@@ -21,7 +21,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
       router.push("/signin");
       return;
     }
-    
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
         router.push("/signin");

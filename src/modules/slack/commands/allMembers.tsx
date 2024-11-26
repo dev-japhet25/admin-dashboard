@@ -2,6 +2,8 @@ import { useState } from "react";
 import Popover from "@/components/Popover";
 import Button from "@/components/Button";
 import { sendSlackCommand } from "@/lib/api";
+import { Modal } from "@/components/Modal/Modal";
+import ImageLoader from "@/components/Loader/Loader";
 
 const AllMembersCommand = () => {
   const [branchId, setBranchId] = useState("");
@@ -10,6 +12,8 @@ const AllMembersCommand = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [response, setResponse] = useState("");
+  const [open,setOpen] = useState(true)
+  const [loading,setLoading] =useState(false)
 
   const handleBranchIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBranchId(e.target.value);
@@ -31,7 +35,15 @@ const AllMembersCommand = () => {
     setToDate(e.target.value);
   };
 
+
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+} 
+
+
   const handleSubmit = async () => {
+    setLoading(true)
     let commandText = `${branchId} ${condition} ${recordType}`;
 
     if (fromDate) {
@@ -43,9 +55,12 @@ const AllMembersCommand = () => {
 
     try {
       const result = await sendSlackCommand("/all_members", commandText);
+      setOpen(true)
+      setLoading(false)
       console.log(result);
       setResponse(result);
     } catch (error: any) {
+      setLoading(false)
       setResponse("An error occurred while fetching data.");
     }
   };
@@ -222,12 +237,12 @@ const AllMembersCommand = () => {
         </div>
 
         <div>
-          <Button handleSubmit={handleSubmit} />
+          <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
-
+       {response && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="All Members">
         {response && (
-          <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg">
-            <p className="text-lg font-bold text-gray-700 text-center">
+          <div className="mt-2 p-6 rounded-md border bg-gray-50 shadow-lg">
+            <p className="text-lg font-normal text-gray-700 text-center">
               {message}
             </p>
             {downloadLink && (
@@ -244,6 +259,8 @@ const AllMembersCommand = () => {
             )}
           </div>
         )}
+        </Modal>}
+        {loading &&  (<ImageLoader/>)}
       </div>
     </div>
   );

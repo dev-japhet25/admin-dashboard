@@ -2,6 +2,8 @@ import { useState } from "react";
 import Popover from '@/components/Popover';
 import Button from '@/components/Button';
 import { sendSlackCommand } from "@/lib/api";
+import { Modal } from "@/components/Modal/Modal";
+import ImageLoader from "@/components/Loader/Loader";
 
 const LookupCommand = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -10,16 +12,25 @@ const LookupCommand = () => {
     setSearchQuery(e.target.value);
   };
   const [response, setResponse] = useState<string | null>(null);
-
+  const [open, setOpen] = useState(true)
+  const [loading,setLoading] =useState(false)
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       const response = await sendSlackCommand("/ussd", searchQuery);
       setResponse(response);
+      setLoading(false)
+      setOpen(true)
     } catch (error: any) {
       setResponse(error.message);
+      setLoading(false)
     }
   };
 
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+  }
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">
@@ -84,51 +95,53 @@ const LookupCommand = () => {
                 Submit Command
               </button>
             </div>
+           {response && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Lookup">
+              {response && (
+                <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
+                  {/* Header Section */}
+                  <div className="mb-4">
+                    <p className="text-lg font-bold text-blue-500 text-center">
+                      Found {response.split("\n")[0]?.split("*")[1] || "N/A"}{" "}
+                      result matching{" "}
+                      <span className="text-blue-500">
+                        {response.split("\n")[0]?.split("*")[3] || "N/A"}
+                      </span>
+                    </p>
+                  </div>
 
-            {response && (
-              <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg">
-                {/* Header Section */}
-                <div className="mb-4">
-                  <p className="text-lg font-bold text-gray-700 text-center">
-                    Found {response.split("\n")[0]?.split("*")[1] || "N/A"}{" "}
-                    result matching{" "}
-                    <span className="text-blue-500">
-                      {response.split("\n")[0]?.split("*")[3] || "N/A"}
-                    </span>
-                  </p>
+                  {/* Results Section */}
+                  <h3 className="text-xl font-semibold text-center text-gray-800 mb-6">
+                    {/* {response.split("\n")[3]?.replace(/(\*|)/g, "") || "Results"} */}
+                  </h3>
+
+                  <div className="space-y-4">
+                    {[
+                      { label: "Id", index: 5 },
+                      { label: "Church Name", index: 6 },
+                      { label: "Owner Email", index: 7 },
+                      { label: "Phone No", index: 8 },
+                      { label: "Country", index: 9 },
+                      { label: "Signup On", index: 10 },
+                    ].map((item) => {
+                      const [key, value] =
+                        response.split("\n")[item.index]?.split(":") || [];
+                      return (
+                        <div
+                          key={item.index}
+                          className="flex justify-between items-center p-4 rounded-lg shadow-sm"
+                        >
+                          <p className="font-medium text-gray-500">{key?.trim() || "N/A"}</p>
+                          <span className="bg-blue-100 text-blue-800 text-xs font-medium px-3 py-0.5 mx-5 rounded dark:bg-blue-900 dark:text-blue-300">
+                            {value?.trim() || "N/A"}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-
-                {/* Results Section */}
-                <h3 className="text-xl font-semibold text-center text-gray-800 mb-6">
-                  {response.split("\n")[3]?.replace(/(\*|)/g, "") || "Results"}
-                </h3>
-
-                <div className="space-y-4">
-                  {[
-                    { label: "Id", index: 5 },
-                    { label: "Church Name", index: 6 },
-                    { label: "Owner Email", index: 7 },
-                    { label: "Phone No", index: 8 },
-                    { label: "Country", index: 9 },
-                    { label: "Signup On", index: 10 },
-                  ].map((item) => {
-                    const [key, value] =
-                      response.split("\n")[item.index]?.split(":") || [];
-                    return (
-                      <div
-                        key={item.index}
-                        className="flex justify-between items-center p-4 text-green-500 rounded-lg shadow-sm"
-                      >
-                        <p className="font-medium">{key?.trim() || "N/A"}</p>
-                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                          {value?.trim() || "N/A"}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+              )}
+            </Modal>}
+            {loading && (<ImageLoader />)}
           </div>
         </div>
       </div>

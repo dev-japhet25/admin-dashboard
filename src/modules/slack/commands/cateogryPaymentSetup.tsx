@@ -1,23 +1,78 @@
 import { useState } from 'react';
 import Popover from '@/components/Popover';
 import Button from '@/components/Button';
+import { sendSlackCommand } from '@/lib/api';
+import { isObject } from '@/lib/helpers/format';
+import { ResponseCard } from '@/components/ResponseCard';
+import toast from 'react-hot-toast';
+import { Modal } from '@/components/Modal/Modal';
+import ImageLoader from '@/components/Loader/Loader';
+
 const CategoryPaymentSetupCommand = () => {
   const [branchId, setBranchId] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [paymentCode, setPaymentCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState<string | string>("")
+  const [open, setOpen] = useState(true)
 
   const handleBranchIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBranchId(e.target.value);
+    setResponse("")
   };
 
   const handleCategoryIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCategoryId(e.target.value);
+    setResponse("")
   };
 
   const handlePaymentCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPaymentCode(e.target.value);
+    setResponse("")
   };
 
+  let command = `${branchId} ${categoryId} ${paymentCode}`;
+
+
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+  }
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    try {
+      const response = await sendSlackCommand("/category_payment_setup", command);
+      setResponse(response);
+      setOpen(true)
+      setLoading(false)
+      if (!response.match(/\*([\w\s]+)\*\s`([^`]+)`/g)) {
+        toast.error(response)
+        setResponse("")
+      }
+    } catch (error: any) {
+      setResponse(error.message);
+      setLoading(false)
+      toast.error(error.message)
+    }
+  };
+
+  console.log('This is the payment', response)
+
+  let formatText = response.split("\n");
+  let formattedData = formatText.slice(3).concat(formatText.slice(0, 1));
+  let fields: { [key: string]: string } = {}
+
+  formattedData.forEach((val) => {
+    let eachText = val.charAt(0).replace("*", "") + val.slice(1)
+    let [key, value] = eachText.split("*")
+    if (key && value) {
+      fields[key.trim()] = value.trim().replaceAll("`", "")
+    }
+  })
+  ///fields.message = formattedData[formattedData.length - 1].replaceAll('*', '')
+
+  console.log('my fields text', fields)
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">
@@ -48,6 +103,12 @@ const CategoryPaymentSetupCommand = () => {
         </div>
 
         <div className="space-y-4">
+          <div className='flex justify-center my-4 bg-red-200 rounded p-4 text-gray-800 text-md font-sans font-semibold'>
+
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg> Sometimes this slack command times out
+          </div>
           <div>
             <label
               htmlFor="branchId"
@@ -98,7 +159,14 @@ const CategoryPaymentSetupCommand = () => {
               placeholder="Enter Payment Code"
             />
           </div>
+          <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
+        {Object.keys(fields).length > 0 && isObject(fields) && response && (
+          <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Category Payment SetUp">
+            <ResponseCard entityKey={Object.keys(fields).map((a) => a.replace("*", "")) || null} entityValue={Object.values(fields).map((a) => a.replace("*", ""))} headerA='Title' headerB='Values' />
+          </Modal>
+        )}
+        {loading && (<ImageLoader />)}
       </div>
     </div>
   );

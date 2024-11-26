@@ -2,6 +2,8 @@ import { useState } from "react";
 import Popover from '@/components/Popover';
 import { sendSlackCommand } from "@/lib/api";
 import Button from '@/components/Button';
+import { Modal } from "@/components/Modal/Modal";
+import ImageLoader from "@/components/Loader/Loader";
 
 const AllAdminsCommand = () => {
   const [churchIds, setChurchIds] = useState("");
@@ -9,6 +11,8 @@ const AllAdminsCommand = () => {
   const [includeCsv, setIncludeCsv] = useState(false);
   const [allChurches, setAllChurches] = useState(false);
   const [response, setResponse] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(true)
 
   const handleChurchIdsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChurchIds(e.target.value);
@@ -28,7 +32,12 @@ const AllAdminsCommand = () => {
     setAllChurches(e.target.checked);
   };
 
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+  }
   const handleSubmit = async () => {
+    setLoading(true)
     let commandText = "";
     if (allChurches) {
       commandText += "all";
@@ -44,8 +53,11 @@ const AllAdminsCommand = () => {
     try {
       const result = await sendSlackCommand("/all_admins", commandText);
       console.log(result);
+      setLoading(false)
+      setOpen(true)
       setResponse(result);
     } catch (error: any) {
+      setLoading(false)
       setResponse("An error occurred while fetching data.");
     }
   };
@@ -208,39 +220,45 @@ const AllAdminsCommand = () => {
 
         {/* Submit Button */}
         <div className="my-6 text-center">
-          <button
+          {/* <button
             onClick={handleSubmit}
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Submit Command
-          </button>
+          </button> */}
+
+          <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
 
         {/* Response Display */}
-        {response && (
-          <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg">
-            <p className="text-lg font-bold text-gray-700 text-center">
-              Found <span className="text-blue-600">{resultCount}</span> result
-              {resultCount !== "1" && "s"}
-            </p>
-            <div className="my-4 text-center">
-              <p className="text-md text-gray-700">Emails: {emails}</p>
-            </div>
-            {downloadLink && (
+        {response && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="All Admins">
+          {response && (
+            <div className="mt-2 p-6 rounded-md border bg-gray-50 shadow-lg">
+              <p className="text-lg font-bold text-gray-700 text-center">
+                Found <span className="text-blue-600">{resultCount}</span> result
+                {resultCount !== "1" && "s"}
+              </p>
               <div className="my-4 text-center">
-                <a
-                  href={downloadLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline"
-                >
-                  Download CSV
-                </a>
+                <p className="text-md text-gray-700">Emails: {emails}</p>
               </div>
-            )}
-          </div>
-        )}
+              {downloadLink && (
+                <div className="my-4 text-center">
+                  <a
+                    href={downloadLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    Download CSV
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
+        </Modal>}
+        {loading && (<ImageLoader />)}
       </div>
+
     </div>
   );
 };

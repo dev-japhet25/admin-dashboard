@@ -7,8 +7,7 @@ function Popover({ children, title }: any) {
         <div
             className="relative"
             onMouseEnter={() => setIsOpen(true)}
-            onMouseLeave={() => setIsOpen(false)}
-        >
+            onMouseLeave={() => setIsOpen(false)}>
             <button
                 type="button"
                 className="text-gray-900 flex"
