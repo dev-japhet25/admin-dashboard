@@ -44,7 +44,7 @@ export const ResponseCard = ({ entityKey, entityValue, headerA, headerB }: Respo
                 </td>
                 <td className="py-4 text-sm text-gray-500 text-left " style={{ wordBreak:'break-word' }}>
 
-                  <span style={{ wordBreak:'break-word' }} className="bg-blue-100 text-dark-500 text-base font-normal  py-0.5 rounded
+                  <span style={{ wordBreak:'break-word' }} className="bg-blue-100 text-dark-500 text-base font-normal  p-1 py-0.5 rounded
                   whitespace-normal capitalize">
                     {entityValue && entityValue[index]}
                   </span>
