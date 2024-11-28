@@ -236,7 +236,7 @@ const SubscriptionSetupCommand = () => {
           </div>
           <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
-        {Object.keys(fields).length > 0 && isObject(fields) && response &&   (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Set Up Ussd">
+        {Object.keys(fields).length > 0 && isObject(fields) && response &&   (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Subscription SetUp">
         <ResponseCard entityKey={Object.keys(fields) || null} entityValue={Object.values(fields) || null} headerA='Heading' headerB='Values' />
         </Modal>)}
         {loading && (<ImageLoader />)}

@@ -22,7 +22,6 @@ const AccountCategoriesCommand = () => {
     try {
       const response = await sendSlackCommand("/account_categories", branchId);
       setResponse(response);
-      console.log('resp', response)
 
       setOpen(true)
       if (!response.includes("*")) {
@@ -45,17 +44,16 @@ const AccountCategoriesCommand = () => {
   }
 
   let splitText = response.split("Results ");
-  console.log(splitText)
+  
   const filterData = splitText.slice(1).map(result => {
-    console.log(result)
+   
     const lines = result.split('\n');
     const obj: { [key: string]: string } = {};
-    console.log(lines)
+   
     lines.forEach(line => {
       const eachLine = line.charAt(0).replace("*", "") + line.slice(1);
       const [key, value] = eachLine.split("*");
       if (key && value) {
-        console.log(key, value)
         obj[key.split(" ").join("")] = value.trim().replace("`", "");
       }
     });

@@ -92,7 +92,7 @@ const Topup = () => {
 
     })
 
-    console.log('the result', fields)
+
     return (
 
         <div className="flex justify-center w-full">

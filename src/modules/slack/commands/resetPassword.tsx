@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Modal } from "@/components/Modal/Modal";
 import Button from "@/components/Button";
 import ImageLoader from "@/components/Loader/Loader";
+import { ResponseCard } from '@/components/ResponseCard';
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -12,6 +13,8 @@ const ResetPassword = () => {
   const [open, setOpen] = useState(true)
   const [loading, setLoading] = useState(false)
   const [responseMessage, setResponseMessage] = useState("");
+
+  const fields : {[key : string] : string} ={}
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -60,6 +63,19 @@ const ResetPassword = () => {
     }
   };
 
+  console.log('password reset',responseMessage)
+
+  const formatResponse = responseMessage.split("\n").slice(1);
+
+  formatResponse.forEach((response,index)=> {
+    let eachLine = response.replaceAll("*","").split(":").filter((val)=> index === 0 ?isNaN(Number(val)): val);
+     let [key,value] = eachLine;
+     if(key && value){
+      fields[key.trim()] = value.trim()
+     }
+  })
+
+   console.log('This ',fields)
   return (
     <div className="flex justify-center w-full">
       <div className="w-2/3">
@@ -145,9 +161,9 @@ const ResetPassword = () => {
           {responseMessage && (
 
             <div
-              className={`my-4 p-4 border rounded-md text-lg ${isError
-                  ? "bg-red-100 text-red-800 border-red-300"
-                  : "bg-green-100 text-green-800 border-green-300"
+              className={`my-4 p-4 border rounded-md text-lg text-center ${isError
+                  ? "bg-white text-red-800 border-slate-300"
+                  : "bg-white text-green-800 border-slate-300"
                 }`}
             >
               <span className="font-semibold">
@@ -156,10 +172,12 @@ const ResetPassword = () => {
               {isError ? (
                 <span>{responseMessage}</span>
               ) : (
-                <span>{responseMessage.replace(/\n/g, " ")}</span>
+                <><span>{responseMessage.split("\n").slice(0, 1)}</span></>
               )}
             </div>
+           
           )}
+            {!isError && (<ResponseCard entityKey={Object.keys(fields) || null} entityValue={Object.values(fields)} headerA='Title' headerB='Values' />)}
         </Modal>}
         {loading && (<ImageLoader />)}
       </div>

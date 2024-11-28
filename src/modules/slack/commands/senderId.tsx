@@ -50,7 +50,7 @@ const SenderId = () => {
   };
 
 
-
+  console.log('my response',response)
   function extractText(text: any) {
     const regexSymbols = /\*([\w\s]+)\*\s*:?\s*([^\n]+)/g;
     let fields: { [key: string]: string } = {};
@@ -134,7 +134,7 @@ const SenderId = () => {
         </Modal>}
 
         { !response.startsWith("*") && response.endsWith(".xlsx") && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Sender ID">
-           <p className='mx-auto'>{response}</p>
+           <div className='flex justify-center'><a className='text-center text-2md hover:bg-blue-600 p-2 hover:text-white ' href={response.split(" ")[2]} target='_blank'>Click Here to Download File</a></div>
         </Modal>}
         {loading && (<ImageLoader />)}
       </div>

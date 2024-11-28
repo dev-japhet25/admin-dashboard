@@ -210,7 +210,7 @@ const SubscribeCommand = () => {
           </div>
           <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
-        {Object.keys(fields).length > 0 && isObject(fields) && response && (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Subscription">
+        {Object.keys(fields).length > 0 && isObject(fields) && response && (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Subscribe">
           <ResponseCard entityKey={Object.keys(fields) || null} entityValue={Object.values(fields) || null} headerA='Heading' headerB='Values' />
         </Modal>)}
         {loading && (<ImageLoader />)}

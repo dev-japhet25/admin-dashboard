@@ -97,7 +97,7 @@ const LookupCommand = () => {
             </div>
            {response && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Lookup">
               {response && (
-                <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
+                <div className="mt-6 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
                   {/* Header Section */}
                   <div className="mb-4">
                     <p className="text-lg font-bold text-blue-500 text-center">

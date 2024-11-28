@@ -154,7 +154,7 @@ const PaymentCategorySetup = () => {
           </div>
           <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
-        {Object.keys(dataText).length > 0 && isObject(dataText) && response &&  (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Payment Category">
+        {Object.keys(dataText).length > 0 && isObject(dataText) && response &&  (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Payment Category SetUp">
         <ResponseCard entityKey={Object.keys(dataText) || null} entityValue={Object.values(dataText) || null} headerA='Heading' headerB='Values' />
           </Modal>)}
           {loading && (<ImageLoader />)}

@@ -94,7 +94,7 @@ const UssdCommand = () => {
             </div>
            {response?.includes("*") && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Ussd Activities">
               {response && (
-                <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
+                <div className="mt-6 p-6 rounded-md border bg-gray-100 shadow-lg max-h-96 overflow-auto ">
                   {/* Dynamically Extract Church and Branch */}
                   <div className="mb-4">
                     <p className="text-xl font-bold  text-blue-600 text-center">

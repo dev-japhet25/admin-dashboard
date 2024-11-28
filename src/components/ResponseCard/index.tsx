@@ -9,7 +9,7 @@ export const ResponseCard = ({ entityKey, entityValue, headerA, headerB }: Respo
   // console.log('my ussd', entityKey, entityValue)
   return (
 
-    <div className="py-1 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
+    <div className="rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
       {/* Header Section */}
       {/* <div className="mb-4">
           <p className="text-lg font-bold text-gray-700 text-center">
@@ -24,14 +24,14 @@ export const ResponseCard = ({ entityKey, entityValue, headerA, headerB }: Respo
         </h3> */}
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mx-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-blue-900">
             <tr>
-              <th className="px-6 py-2 text-center text-sm font-medium text-white uppercase tracking-wider whitespace-nowrap">
+              <th className="px-6 py-2 text-justify text-sm font-medium text-white uppercase tracking-wider whitespace-nowrap">
                 {headerA}
               </th>
-              <th className="px-6 py-2 text-center text-sm font-medium text-white uppercase tracking-wider whitespace-nowrap">
+              <th className="px-6 py-2 text-justify text-sm font-medium text-white uppercase tracking-wider whitespace-nowrap">
                 {headerB}
               </th>
             </tr>
@@ -39,13 +39,13 @@ export const ResponseCard = ({ entityKey, entityValue, headerA, headerB }: Respo
           <tbody className="bg-white divide-y divide-gray-200">
             {entityKey && entityKey.map((val, index) => (
               <tr key={index} className="hover:bg-gray-100">
-                <td className="font-semibold  text-justify p-2 py-4 whitespace-normal text-md text-gray-500 capitalize">
+                <td className="p-2 font-semibold  text-left py-4 whitespace-normal text-md text-gray-500 capitalize">
                   {val}
                 </td>
-                <td className="py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                <td className="py-4 text-sm text-gray-500 text-left " style={{ wordBreak:'break-word' }}>
 
-                  <span className="bg-blue-100 text-dark-500 text-base font-normal px-2.5 py-0.5 rounded
-                  whitespace-normal capitalize p-2">
+                  <span style={{ wordBreak:'break-word' }} className="bg-blue-100 text-dark-500 text-base font-normal  py-0.5 rounded
+                  whitespace-normal capitalize">
                     {entityValue && entityValue[index]}
                   </span>
 

@@ -17,15 +17,15 @@ interface ModalProps {
 export const Modal = ({ children, onClick, open, setOpen, modalHead, className }: ModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className={className ? className : "sm:max-w-[450px]"}>
+      <DialogContent className='bg-gray-50 overflow-auto'>
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-center text-gray-900 uppercase py-3 whitespace-nowrap flex items-center justify-center gap-2">
+          <DialogTitle className="text-xl font-bold text-center text-gray-900 uppercase py-3  flex items-center justify-center gap-2">
             <Info className="h-6 w-6" />
             {modalHead}
           </DialogTitle>
         </DialogHeader>
-        
-        <div className="mx-auto">
+
+        <div className="mx-auto sm:w-[90%] md:w-[90%] lg:w-[90%] xl:w-[90%] overflow-auto">
           {children}
         </div>
 

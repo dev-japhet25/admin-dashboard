@@ -110,7 +110,7 @@ const BranchesCommand = () => {
             {Object.values(branches).length > 0 && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="List Of Branches">
               {response && (
 
-                <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
+                <div className="mt-6 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
                   {/* Header Section */}
                   <div className="mb-4">
                     <p className="text-lg font-bold text-gray-700 text-center">
@@ -140,7 +140,7 @@ const BranchesCommand = () => {
                       <tbody className="bg-white divide-y divide-gray-200">
                         {branches.map((branch, index) => (
                           <tr key={index} className="hover:bg-gray-100">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className=" py-4 whitespace-nowrap text-sm text-gray-500">
                               {branch.name}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

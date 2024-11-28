@@ -53,7 +53,7 @@ const SetupUssd = () => {
         }
     };
 
-    console.log('yyyyy', response)
+   
 
     function onClick() {
         setOpen(false)
@@ -79,13 +79,13 @@ const SetupUssd = () => {
         return fields;
     }
     let checkMatches = response.match(/(?:\*?([\w\s]+)\*?):\s*([^\n]+)/g) ? extractText(response) : response;
-    console.log(checkMatches);
+
 
     function isObject(value: any) {
         return value !== null && typeof value === 'object' && !Array.isArray(value)
     }
 
-    console.log('object is', isObject(checkMatches))
+    
 
 
     return (
