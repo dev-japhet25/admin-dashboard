@@ -17,9 +17,9 @@ interface ModalProps {
 export const Modal = ({ children, onClick, open, setOpen, modalHead, className }: ModalProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className='bg-gray-50 overflow-auto'>
+      <DialogContent className='bg-white overflow-auto'>
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-center text-gray-900 uppercase py-3  flex items-center justify-center gap-2">
+          <DialogTitle className="text-xl font-bold text-center text-slate-800 uppercase py-3  flex items-center justify-center gap-2">
             <Info className="h-6 w-6" />
             {modalHead}
           </DialogTitle>
@@ -33,7 +33,7 @@ export const Modal = ({ children, onClick, open, setOpen, modalHead, className }
           <Button
             variant="secondary"
             onClick={onClick}
-            className="w-full sm:w-auto bg-gray-900 hover:bg-blue-300"
+            className="w-full sm:w-auto bg-gray-900 hover:bg-blue-900"
           >
             <X className="h-4 w-4 mr-2 text-white" /> <span className='text-white font-medium'>Close</span>
           </Button>
