@@ -30,7 +30,7 @@ export default function Header() {
           </div>
 
           {/* Logout button (visible on all screen sizes) */}
-          <div className="flex justify-end ml-[80%]">
+          <div className="flex justify-end md:ml-[55%] lg:ml-[65%] xl:ml-[75%]">
             <Button
               onClick={() => handleLogout({router:router, callbackUrl:"/slack"})}
               variant="secondary"

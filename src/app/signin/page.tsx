@@ -40,7 +40,7 @@ const SignIn = () => {
       if (userDoc.exists()) {
         const userData = userDoc.data();
         localStorage.setItem("userCommands", JSON.stringify(userData.commands));
-        localStorage.setItem("username", encrypt(userData.username));  
+        localStorage.setItem("username", encrypt(userData.username));
         router.push(callbackUrl);
         await toast.success("Logged in successfully");
       } else {
@@ -50,7 +50,7 @@ const SignIn = () => {
       setLoading(false);
     } catch (error: any) {
       setLoading(false);
-      toast.error("Invalid email or password");
+      toast.error("Sorry an error occured in processing your request");
       setError(error.message);
     }
   };

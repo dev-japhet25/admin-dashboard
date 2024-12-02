@@ -1,13 +1,53 @@
 import { useState } from 'react';
 import Popover from '@/components/Popover';
 import Button from '@/components/Button';
+import { sendSlackCommand } from "@/lib/api";
+import {ResponseCard} from '@/components/ResponseCard';
+import toast from 'react-hot-toast';
+import { Modal } from '@/components/Modal/Modal';
+import ImageLoader from '@/components/Loader/Loader';
 
 const UssdBranchesCommand = () => {
   const [searchText, setSearchText] = useState('');
+  const [response, setResponse] = useState<string | null>(null);
+   const [open,setOpen] = useState(true)
+   const [loading,setLoading] =useState(false)
 
+   function onClick() {
+    setOpen(false)
+    setResponse("")
+}
   const handleSearchTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
+    setResponse("")
   };
+ 
+  const handleSubmit = async () => {
+    setLoading(true)
+    try {
+      const response = await sendSlackCommand("/ussd_branches",searchText);
+      setResponse(response);
+      setLoading(false)
+
+      if(!response.includes("*")){
+        toast.error(response)
+        return;
+      }
+      setOpen(true)
+    } catch (error: any) {
+      setResponse(error.message);
+      setLoading(false)
+    }
+  };
+   
+  
+  const branchNames = response?.match(/(?<=\*Branch\*\s).+/g);
+
+  // Extract USSD codes
+  const ussdCodes = response?.match(/(?<=\*USSD Code\*\s)\d+/g);
+
+
+ 
 
   return (
     <div className="flex justify-center w-full">
@@ -51,6 +91,20 @@ const UssdBranchesCommand = () => {
               className="w-full p-2 border border-gray-300 rounded-md text-gray-900"
               placeholder="Enter USSD ID or 'all'"
             />
+            <div className="my-6 text-center">
+              <button
+                onClick={handleSubmit}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Submit Command
+              </button>
+            </div>
+            { branchNames && branchNames?.length > 0  &&  (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Ussd Branches">
+          <ResponseCard  entityKey={branchNames || null} entityValue={ussdCodes || null} headerA='Branches' headerB='Ussd Codes'/>
+             </Modal>)
+}
+
+{loading && (<ImageLoader />)}
           </div>
         </div>
       </div>

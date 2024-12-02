@@ -2,6 +2,9 @@ import { useState } from "react";
 import Popover from '@/components/Popover';
 import Button from '@/components/Button';
 import { sendSlackCommand } from "@/lib/api";
+import { Modal } from "@/components/Modal/Modal";
+import toast from "react-hot-toast";
+import ImageLoader from "@/components/Loader/Loader";
 
 const UssdCommand = () => {
   const [branchId, setBranchId] = useState("");
@@ -11,15 +14,32 @@ const UssdCommand = () => {
   };
 
   const [response, setResponse] = useState<string | null>(null);
+  const [open, setOpen] = useState(true)
+  const [loading,setLoading] =useState(false)
+
 
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       const response = await sendSlackCommand("/ussd", branchId);
       setResponse(response);
+      setLoading(false)
+     
+      if(!response.includes("*")){
+        toast.error(response)
+        return;
+      }
+      setOpen(true)
     } catch (error: any) {
+      setLoading(false)
       setResponse(error.message);
     }
   };
+
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+} 
 
   return (
     <div className="flex justify-center w-full">
@@ -72,66 +92,87 @@ const UssdCommand = () => {
                 Submit Command
               </button>
             </div>
-
-            {response && (
-              <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg">
-                {/* Dynamically Extract Church and Branch */}
-                <div className="mb-4">
-                  <p className="text-lg font-bold  text-gray-700 text-center">
-                    Branch:{" "}
-                    {response
-                      .split("\n")[2]
-                      .replace(/(\*|)/g, "")
-                      .replace("Church:", "")}
-                  </p>
-                </div>
-
-                {/* USSD Activities Section */}
-                <h3 className="text-xl font-semibold text-center text-gray-800 mb-6">
-                  {response.split("\n")[4].replace(/(\*|)/g, "")}
-                </h3>
-
-                <div className="space-y-4">
-                  <div className="flex justify-evenly items-center p-4 text-green-500 rounded-lg shadow-sm">
-                    <p>
-                      {
-                        response
-                          .split("\n")[6]
-                          .replace(/(\*|)/g, "")
-                          .split(":")[0]
-                      }
+           {response?.includes("*") && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Ussd Activities">
+              {response && (
+                <div className="mt-6 p-6 rounded-md border bg-gray-100 shadow-lg max-h-96 overflow-auto ">
+                  {/* Dynamically Extract Church and Branch */}
+                  <div className="mb-4">
+                    <p className="text-xl font-bold  text-blue-600 text-center">
+                      Branch:{" "}
+                      {response
+                        ?.split("\n")[2]
+                        ?.replace(/(\*|)/g, "")
+                        ?.replace("Church:", "")}
                     </p>
-                    <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
-                      {
-                        response
-                          .split("\n")[6]
-                          .replace(/(\*|)/g, "")
-                          .split(":")[1]
-                      }
-                    </span>
                   </div>
 
-                  <div className="flex justify-evenly items-center p-4 text-green-500 rounded-lg shadow-sm">
-                    <p>
+
+
+                  <div className="space-y-4">
+                    <div className="flex justify-evenly items-center p-4 text-blue-500 rounded-lg shadow-sm">
+                     
+                      <span className="whitepsace-normal text-md font-normal me-2 px-2.5 py-0.5 rounded">
                       {
-                        response
-                          .split("\n")[7]
-                          .replace(/(\*|)/g, "")
-                          .split(":")[0]
-                      }
-                    </p>
-                    <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
-                      {
-                        response
-                          .split("\n")[7]
-                          .replace(/(\*|)/g, "")
-                          .split(":")[1]
-                      }
-                    </span>{" "}
+                          response
+                            ?.split("\n")[6]
+                            ?.replace(/(\*|)/g, "")
+                            ?.split(":")[0]
+                        }
+                      </span>
+                      <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                        {
+                          response
+                            ?.split("\n")[6]
+                            ?.replace(/(\*|)/g, "")
+                            ?.split(":")[1]
+                        }
+                      </span>
+                    </div>
+
+                    {/* <div className="flex justify-evenly items-center p-4 text-green-500 rounded-lg shadow-sm">
+                      <p>
+                        {
+                          response
+                            ?.split("\n")[7]
+                            ?.replace(/(\*|)/g, "")
+                            ?.split(":")[0]
+                        }
+                      </p>
+                      <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                        {
+                          response
+                            ?.split("\n")[7]
+                            ?.replace(/(\*|)/g, "")
+                            ?.split(":")[1]
+                        }
+                      </span>{" "}
+                    </div> */}
+                   <div className="flex justify-evenly items-center p-4 text-blue-500 rounded-lg shadow-sm">
+                     
+                     <span className="whitespace-normal text-md font-normal me-2 px-2.5 py-0.5 rounded">
+                     {
+                          response
+                            ?.split("\n")[7]
+                            ?.replace(/(\*|)/g, "")
+                            ?.split(":")[0]
+                        }
+                     </span>
+                     <span className="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                     {
+                          response
+                            ?.split("\n")[7]
+                            ?.replace(/(\*|)/g, "")
+                            ?.split(":")[1]
+                        }
+                     </span>
+                   </div>
+
+                  
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </Modal>}
+            {loading && (<ImageLoader />)}
           </div>
         </div>
       </div>

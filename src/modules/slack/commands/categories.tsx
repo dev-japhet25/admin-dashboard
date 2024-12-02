@@ -33,7 +33,7 @@ const CategoriesCommand: React.FC = () => {
 
     try {
       const result = await sendSlackCommand("/categories", commandText); // Ensure this function is defined
-      console.log(result);
+      
 
       // Parse the categories from the response text
       const categoryLines = result.split('\n').filter(line => line.trim());

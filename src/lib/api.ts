@@ -72,7 +72,7 @@ export const sendSlackCommand = async (
         command: command,
         text: text,
         main_thread: true,
-        user_name: decrypt(localStorage.getItem('username') ||  ""),
+        user_name: decrypt(localStorage.getItem('username') || ""),
       }
     );
 

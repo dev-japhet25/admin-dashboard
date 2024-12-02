@@ -1,18 +1,76 @@
 import React, { useState } from 'react';
 import Popover from '@/components/Popover';
 import Button from '@/components/Button';
+import { sendSlackCommand } from '@/lib/api';
+import { ResponseCard } from '@/components/ResponseCard';
+import { Modal } from '@/components/Modal/Modal';
+import toast from 'react-hot-toast';
+import ImageLoader from '@/components/Loader/Loader';
+
 
 const SenderId = () => {
   const [activationStatus, setActivationStatus] = useState('');
   const [senderId, setSenderId] = useState('');
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(true)
+  let [response, setResponse] = useState<string | string>("");
 
   const handleActivationStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setActivationStatus(e.target.value);
+    setResponse("")
   };
 
   const handleSenderIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSenderId(e.target.value);
+    setResponse("")
   };
+
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+}
+  let textCommand = "";
+  textCommand += `${activationStatus} ${senderId}`;
+  const handleSubmit = async () => {
+    setLoading(true)
+    try {
+      const response = await sendSlackCommand("/sender_id", textCommand);
+      setResponse(response);
+      setOpen(true)
+      setLoading(false)
+       if(!response.startsWith("*") && !response.endsWith(".xlsx")){
+         toast.error(response)
+         return;
+       }
+    } catch (error: any) {
+      setResponse(error.message);
+      toast.error(error.message)
+      setLoading(false)
+    }
+  };
+
+
+  console.log('my response',response)
+  function extractText(text: any) {
+    const regexSymbols = /\*([\w\s]+)\*\s*:?\s*([^\n]+)/g;
+    let fields: { [key: string]: string } = {};
+    let match;
+    while ((match = regexSymbols.exec(text)) !== null) {
+      // Capture the key and value
+      const key = match[1].trim().replace(/\s+/g, "").toLowerCase();
+      const value = match[2].trim();
+      // Assign fields in a more intuitive way to handle all keys correctly
+      fields[key] = value;
+    }
+    // Output the parsed object
+    return fields;
+  }
+
+  let activateOrdeactivateOrStatus = ['activate', 'deactivate', 'status'];
+
+  let actionData = activateOrdeactivateOrStatus.includes(activationStatus) ? extractText(response) : response;
+
+ 
 
   return (
     <div className="flex justify-center w-full">
@@ -69,7 +127,16 @@ const SenderId = () => {
               placeholder="Enter sender ID"
             />
           </div>
+          <Button handleSubmit={handleSubmit} loading={loading}  />
         </div>
+        { response.startsWith("*") && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Sender ID">
+         <ResponseCard entityKey={Object.keys(actionData) || null} entityValue={Object.values(actionData) || null} headerA='Title' headerB='Values' />
+        </Modal>}
+
+        { !response.startsWith("*") && response.endsWith(".xlsx") && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Sender ID">
+           <div className='flex justify-center'><a className='text-center text-2md hover:bg-blue-600 p-2 hover:text-white ' href={response.split(" ")[2]} target='_blank'>Click Here to Download File</a></div>
+        </Modal>}
+        {loading && (<ImageLoader />)}
       </div>
     </div>
   );

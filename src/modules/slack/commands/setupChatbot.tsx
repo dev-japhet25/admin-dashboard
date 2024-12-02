@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import Popover from '@/components/Popover';
 import Button from '@/components/Button';
+import { sendSlackCommand } from '@/lib/api';
+import toast from 'react-hot-toast';
+import { isObject } from '@/lib/helpers/format';
+import { ResponseCard } from '@/components/ResponseCard';
+import { Modal } from '@/components/Modal/Modal';
+import ImageLoader from '@/components/Loader/Loader';
 
 const SetupChatbot = () => {
     const [branchId, setBranchId] = useState('');
@@ -9,6 +15,10 @@ const SetupChatbot = () => {
     const [secretKey, setSecretKey] = useState('');
     const [provider, setProvider] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [response, setResponse] = useState<string | string>("")
+    const [open,setOpen] = useState(true)
+    const [loading, setLoading] = useState(false)
+    const command = `${branchId} ${platform} ${uniqueId} ${secretKey} ${provider} ${phoneNumber}`
 
     const handleBranchIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setBranchId(e.target.value);
@@ -34,6 +44,41 @@ const SetupChatbot = () => {
         setPhoneNumber(e.target.value);
     };
 
+    function onClick() {
+        setOpen(false)
+        setResponse("")
+    }
+    const handleSubmit = async () => {
+        try {
+            const response = await sendSlackCommand("/setup_chatbot", command);
+            setResponse(response);
+             setOpen(true)
+            if (!response.split(",")[0].match(/(?:\*?([\w\s]+)\*?):\s*([^\n]+)/g)) {
+                //show toast error if the right commands are not sent
+                toast.error(response)
+                setResponse("")
+              }
+        } catch (error: any) {
+            setResponse(error.message);
+        }
+    };
+
+    
+
+    let formatText = response.split('\n').filter((text)=> !text.includes("Status"));
+
+    let fields: { [key : string] : string} = {}
+
+    formatText.forEach((text)=> {
+        let [key,value] = text.split(":");
+        if (key && value) {
+            fields[key.trim().replace("*","")] = value.replace("*","").trim()
+        }
+        
+    })
+       
+      fields.message = 'Chatbot ' + formatText[3]
+    
     return (
         <div className="flex justify-center w-full">
             <div className="w-2/3">
@@ -148,7 +193,14 @@ const SetupChatbot = () => {
                             placeholder="Enter Phone Number"
                         />
                     </div>
+                    <Button handleSubmit={handleSubmit} loading={loading} />
                 </div>
+                {
+                  Object.keys(fields).length > 0 && isObject(fields) && response &&
+                  (<Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Set Up Chat Bot">
+               <ResponseCard entityKey={Object.keys(fields) || null} entityValue={Object.values(fields) || null} headerA='Title' headerB='Values' />
+                </Modal>)}
+                {loading && (<ImageLoader />)}
             </div>
         </div>
     );

@@ -103,12 +103,40 @@ const SlackCommands = () => {
   const [selectedComponent, setSelectedComponent] = useState<string | null>(
     null
   );
-  const [availableCommands, setAvailableCommands] = useState<string[]>([]);
+  // const [availableCommands, setAvailableCommands] = useState<string[]>([]);
 
-  useEffect(() => {
-    const commands = JSON.parse(localStorage.getItem("userCommands") || "[]");
-    setAvailableCommands(commands);
-  }, []);
+
+  const [availableCommands, setAvailableCommands] = useState<string[]>([
+    "appUser",
+    "allAdmins",
+    "allMembers",
+    "user_token",
+    "resetPassword",
+    "setup_ussd",
+    "ussd",
+    "ussdBranches",
+    "setupPayment",
+    "topup",
+    "balance",
+    "paymentCategorySetup",
+    "subscribe",
+    "subscription",
+    "subscriptionSetup",
+    "accountCategories",
+    "categoryPaymentSetup",
+    "lookup",
+    "member_type",
+    "branches",
+    "sender_id",
+    "setup_chatbot",
+  ]);
+
+
+  // useEffect(() => {
+  //   const commands = JSON.parse(localStorage.getItem("userCommands") || "[]");
+  //    console.log('my commands',commands)
+  //   setAvailableCommands(commands);
+  // }, []);
 
   const handleSelectChange = (value: string) => {
     setSelectedComponent(value);

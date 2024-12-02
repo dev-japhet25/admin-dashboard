@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import Popover from '@/components/Popover';
 import Button from '@/components/Button';
 import { sendSlackCommand } from "@/lib/api";
+import { Modal } from "@/components/Modal/Modal";
+import toast from "react-hot-toast";
+import ImageLoader from "@/components/Loader/Loader";
 
 const UserToken = () => {
   const [email, setEmail] = useState("");
   const [result, setResult] = useState("");
+  const [open, setOpen] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -13,13 +18,32 @@ const UserToken = () => {
 
   const [response, setResponse] = useState<string | null>(null);
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       const response = await sendSlackCommand("/user_token", email);
+      setOpen(true)
+      setLoading(false)
+      if (response.includes("No user with email")) {
+        toast.error(response.replaceAll("*", ""))
+        return;
+      }
+      if(!response.startsWith("*")){
+        toast.error(response)
+        return;
+      }
       setResponse(response);
     } catch (error: any) {
       setResponse(error.message);
+      setLoading(false)
     }
   };
+
+
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+  }
+
 
   return (
     <div className="flex justify-center w-full">
@@ -68,44 +92,53 @@ const UserToken = () => {
         </div>
 
         <div className="my-6 text-center">
-          <button
+          {/* <button
             onClick={handleSubmit}
             className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
             Submit Command
-          </button>
+          </button> */}
+
+
+
+          <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
 
-        {response && (
-          <div className="mt-6 p-6 rounded-md border bg-gray-50 shadow-lg">
-            {/* Dynamically Extract User and Email Token */}
-            <div className="mb-4">
-              <p className="text-lg font-bold text-gray-700 text-center">
-                User:{" "}
-                {response
-                  .split("\n")[0]
-                  .replace(/(\*|)/g, "")
-                  .replace("User:", "")}
-              </p>
-            </div>
-
-            {/* Email Token Section */}
-            <h3 className="text-xl font-semibold text-center text-gray-800 mb-6">
-              Email Token
-            </h3>
-
-            <div className="space-y-4">
-              <div className="flex justify-evenly items-center p-4 text-blue-500 rounded-lg shadow-sm">
-                <p>
-                  {response.split("\n")[1].replace(/(\*|)/g, "").split(":")[0]}
+        {response &&
+         <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="User Token">
+          {response && (
+            <div className="mt-1 p-4 rounded-md border bg-gray-50 shadow-lg max-h-96 overflow-auto">
+              {/* Dynamically Extract User and Email Token */}
+              <div className="mb-1">
+                <p className="text-blue-500 capitalize text-center font-normal text-xl">
+                  {/* User  
+                  {" "} */}
+                  {response
+                    ?.split("\n")[0].split(" ").slice(2).join(" ")
+                    ?.replace(/(\*|)/g, "")
+                    ?.replace("User:", "")}
                 </p>
-                <span className="bg-blue-100 text-blue-800 text-sm font-bold me-2 px-2.5 py-0.5 rounded">
-                  {response.split("\n")[1].replace(/(\*|)/g, "").split(":")[1]}
-                </span>
+              </div>
+
+              {/* Email Token Section */}
+              {/* <h3 className="text-xl font-semibold text-center text-gray-800 mb-2">
+              Email Token
+            </h3> */}
+
+              <div className="">
+                <div className="flex justify-evenly items-center text-blue-500 rounded-lg shadow-sm">
+                  <p>
+                    {response?.split("\n")[1]?.replace(/(\*|)/g, "")?.split(":")[0]}
+                  </p>
+                  <span className="bg-blue-100 text-blue-800 text-sm font-bold me-2 mx-5 px-0.5 py-0.5 rounded">
+                    {response?.split("\n")[1]?.replace(/(\*|)/g, "")?.split(":")[1]}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </Modal>}
+        {loading && (<ImageLoader />)}
       </div>
     </div>
   );

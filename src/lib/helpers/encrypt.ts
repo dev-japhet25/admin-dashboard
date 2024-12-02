@@ -10,4 +10,6 @@ const decrypt = (data:string) => {
   return CryptoJS.AES.decrypt(data, secretKey).toString(CryptoJS.enc.Utf8);
 };
 
+
+
 export { encrypt, decrypt };

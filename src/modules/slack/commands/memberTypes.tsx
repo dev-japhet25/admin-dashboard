@@ -3,21 +3,34 @@ import Popover from '@/components/Popover';
 import Button from '@/components/Button';
 import axios from "axios";
 import { sendSlackCommand } from "@/lib/api";
+import { Modal } from "@/components/Modal/Modal";
+import ImageLoader from "@/components/Loader/Loader";
+
 
 const MemberTypesCommand = () => {
   const [branchId, setBranchId] = useState("");
   const [response, setResponse] = useState<string | null>(null);
+  const [open,setOpen] =useState(true)
+  const  [loading,setLoading] =useState(false)
 
   const handleBranchIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBranchId(e.target.value);
   };
 
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+}
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       const response = await sendSlackCommand("/member_types", branchId);
       setResponse(response);
+      setLoading(false)
+      setOpen(true)
     } catch (error: any) {
       setResponse(error.message);
+      setLoading(false)
     }
   };
 
@@ -93,22 +106,22 @@ const MemberTypesCommand = () => {
                 Submit Command
               </button>
             </div>
-
+            {response && <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Member Types">
             {response && (
-              <div className="mt-6 p-4 rounded-md border bg-white shadow-md">
+              <div className="mt-6 rounded-md border bg-white shadow-md max-h-96 overflow-auto">
                 {/* <h3 className="text-xl text-gray-900 text-center font-semibold">Response</h3> */}
 
                 <div className="mt-4 space-y-4">
                   {/* Extract Church Name */}
-                  <p className="text-lg font-semibold text-gray-800">
-                    <span className="font-bold">Church:</span>{" "}
-                    {response.split("\n")[0].replace("*Church:* ", "")}
+                  <p className="text-lg font-semibold text-blue-500 text-center">
+                    <span className="font-bold uppercase text-center">{response.split("\n")[0].replace("*Church:* ", "")}</span>
+                   
                   </p>
 
                   {/* Member Types Section */}
-                  <h3 className="text-lg font-bold text-center text-gray-900">
+                  {/* <h3 className="text-lg font-bold text-center text-gray-900">
                     MEMBER TYPES
-                  </h3>
+                  </h3> */}
 
                   {/* List of member types */}
                   <ul className="space-y-2">
@@ -123,11 +136,11 @@ const MemberTypesCommand = () => {
                             <span className="text-lg font-medium text-gray-700">
                               {type}
                             </span>
-                            <span
+                            <span className="mx-5"
                               style={{
                                 backgroundColor:
-                                  count === "0" ? "#ffc5c5" : "#cce5cc",
-                                color: count === "0" ? "#ff3737" : "#34c759",
+                                  count === "0" ? "#ffc5c5" : "#3b82f6",
+                                color: count === "0" ? "#ff3737" : "white",
                                 fontSize: "0.75rem",
                                 fontWeight: "500",
                                 padding: "0.25rem 0.5rem",
@@ -146,6 +159,8 @@ const MemberTypesCommand = () => {
                 </div>
               </div>
             )}
+            </Modal>}
+            {loading && (<ImageLoader />)}
           </div>
         </div>
       </div>

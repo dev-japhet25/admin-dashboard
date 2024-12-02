@@ -1,12 +1,64 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import Popover from '@/components/Popover';
+import Button from '@/components/Button';
+import { sendSlackCommand } from '@/lib/api';
+import { ResponseCard } from '@/components/ResponseCard';
+import { Modal } from '@/components/Modal/Modal';
+import ImageLoader from '@/components/Loader/Loader';
+import toast from 'react-hot-toast';
 
 const AccountCategoriesCommand = () => {
   const [branchId, setBranchId] = useState('');
+  const [response, setResponse] = useState<string | string>("")
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(true)
 
   const handleBranchIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBranchId(e.target.value);
   };
+
+  const handleSubmit = async () => {
+    setLoading(true)
+    try {
+      const response = await sendSlackCommand("/account_categories", branchId);
+      setResponse(response);
+
+      setOpen(true)
+      if (!response.includes("*")) {
+        setLoading(false)
+        toast.error(response)
+        return;
+      }
+      if (response) {
+        setLoading(false)
+      }
+    } catch (error: any) {
+      setResponse(error.message);
+      setLoading(false)
+    }
+  };
+
+  function onClick() {
+    setOpen(false)
+    setResponse("")
+  }
+
+  let splitText = response.split("Results ");
+  
+  const filterData = splitText.slice(1).map(result => {
+   
+    const lines = result.split('\n');
+    const obj: { [key: string]: string } = {};
+   
+    lines.forEach(line => {
+      const eachLine = line.charAt(0).replace("*", "") + line.slice(1);
+      const [key, value] = eachLine.split("*");
+      if (key && value) {
+        obj[key.split(" ").join("")] = value.trim().replace("`", "");
+      }
+    });
+    return obj;
+  });
 
   return (
     <div className="flex justify-center w-full">
@@ -51,7 +103,225 @@ const AccountCategoriesCommand = () => {
               placeholder="Enter Branch ID"
             />
           </div>
+          <Button handleSubmit={handleSubmit} loading={loading} />
         </div>
+
+        {filterData?.length > 0 && (
+          <Modal onClick={onClick} setOpen={setOpen} open={open} modalHead="Account Categories">
+
+
+            <div className='max-h-96 overflow-auto'>
+              {
+                filterData?.map((val: any, index: number) => {
+                  return (
+
+                    <>
+                      <ul className='sm:p-5'>
+                        <li className="py-3 sm:py-4">
+                          <div className="uppercase flex items-center text-md bg-blue-500 text-white p-1">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium  dark:text-white">
+                                Title
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-2sm font-semibold text-gray-900 dark:text-white" />
+                            Values
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                ID
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.ID}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Name
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Name}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Description
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Description}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Account Name
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.AccountName}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Currency
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Currency}
+                          </div>
+                        </li>
+
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Members Can Contribute
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Memberscancontribute}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Account Name
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.AccountName}
+                          </div>
+                        </li>
+
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Payment Code Branch
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Paymentcodebranch}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Recurrence
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Recurrence}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Rank
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Rank}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Show On Ussd
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Showonussd}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Show On Mobile
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Showonmobile}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Date Modified
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Datemodified}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Date Created
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Datecreated}
+                          </div>
+                        </li>
+                        <li className="py-3 sm:py-4">
+                          <div className="flex items-center">
+                            <div className="flex-1 min-w-0 ms-4">
+                              <p className="text-md font-medium text-gray-700 truncate dark:text-white">
+                                Payment
+                              </p>
+
+                            </div>
+                            <div className="inline-flex items-center text-md font-semibold text-gray-900 dark:text-white" />
+                            {val.Paymentcode}
+                          </div>
+                        </li>
+                      </ul>
+                    </>
+                  )
+                })
+
+              }
+
+
+            </div>
+          </Modal>)}
+        {loading && (<ImageLoader />)}
       </div>
     </div>
   );
