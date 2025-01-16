@@ -1,14 +1,14 @@
 import React from 'react';
 
-const Button = ({ handleSubmit, loading = false }: { handleSubmit: () => void, loading?: boolean }) => {
+const Button = ({ handleSubmit, loading = false,buttonName,className }: { handleSubmit?: () => void, loading?: boolean, buttonName? :string,className?: string}) => {
   return (
     <div className="my-6 text-center">
       <button
         disabled={loading}
         onClick={handleSubmit}
-        className="w-full px-4 py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700"
+        className={className ? className : "w-full px-4 py-2 bg-blue-700 text-white text-nowrap rounded-md hover:bg-blue-700" }
       >
-        {loading ? 'Loading...' : 'Submit Command'}
+        {loading ? 'Loading...' : buttonName ? buttonName :'Submit Command'}
       </button>
     </div>
   );

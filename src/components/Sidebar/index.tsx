@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { RiHome5Line, RiSlackFill } from 'react-icons/ri'
+import { RiHome5Line, RiSlackFill,RiMoneyDollarCircleLine } from 'react-icons/ri'
 import { TbDeviceHeartMonitor } from 'react-icons/tb'
 import { FiUserX } from 'react-icons/fi'
 import { MdExpandMore } from 'react-icons/md'
@@ -26,6 +26,11 @@ const menuItems: MenuItem[] = [
     name: "Slack Commands",
     icon: <RiSlackFill className="text-lg" />,
     route: "/slack",
+  },
+  {
+    name: "Payment Commands",
+    icon: <RiMoneyDollarCircleLine className="text-lg" />,
+    route: "/payment",
   },
   {
     name: "USSD Monitor",
