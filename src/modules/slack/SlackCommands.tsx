@@ -37,6 +37,7 @@ import UserToken from "./commands/userToken";
 import UssdCommand from "./commands/ussd";
 import UssdBranchesCommand from "./commands/ussdBranches";
 
+
 const componentMap: Record<string, React.ComponentType> = {
   appUser: AppUserCommand,
   allAdmins: AllAdminsCommand,
@@ -65,7 +66,7 @@ const componentMap: Record<string, React.ComponentType> = {
   blockUnblock: BlockUnblockCommand,
   insuranceSetup: InsuranceSetupCommand,
   categories: CategoriesCommand,
-  botSetup: BotSetup,
+  botSetup: BotSetup
 };
 
 const commandLabels: Record<string, string> = {
@@ -96,7 +97,7 @@ const commandLabels: Record<string, string> = {
   blockUnblock: "Block/Unblock",
   insuranceSetup: "Insurance Setup",
   categories: "Categories",
-  botSetup: "Bot Setup",
+  botSetup: "Bot Setup"
 };
 
 const SlackCommands = () => {
@@ -128,7 +129,7 @@ const SlackCommands = () => {
     "member_type",
     "branches",
     "sender_id",
-    "setup_chatbot",
+    "setup_chatbot"
   ]);
 
 
