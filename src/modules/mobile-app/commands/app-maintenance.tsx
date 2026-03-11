@@ -7,10 +7,7 @@ import { FetchDataMaintenance } from "@/lib/firebase-actions";
 import { updateMaintenanceData } from "@/lib/firebase-actions";
 
 const AppMaintenance = () => {
-  const { mobileVersion, setMobileVersion } = FetchDataMaintenance(
-    process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_NAME || "",
-    process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_ID || ""
-  );
+  const { mobileVersion, setMobileVersion } = FetchDataMaintenance();
   const [data, setData] = useState({
     loading: false,
     isError: false,
@@ -46,8 +43,6 @@ const AppMaintenance = () => {
 
       // Call updateMaintenanceData immediately after updating state
       updateMaintenanceData(
-        process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_NAME || "",
-        process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_ID || "",
         newVersions[index],
         setData
       );

@@ -17,10 +17,15 @@ interface MaintenanceProps {
   appState: boolean;
 }
 
-export const FetchDataMaintenance = (
-  docMaintenanceName: string,
-  docMaintenanceId: string
-) => {
+// provided a fallback value for the environment variables if not set
+
+const docMaintenanceName: string = process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_NAME || "maintenance";
+const docMaintenanceId: string =  process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_ID || "TyyHnOOoBdKRQ6sZdLjs";
+const docVersionName: string = process.env.NEXT_PUBLIC_FIREBASE_VERSION_NAME || "versionsTests";
+const docVersionId: string = process.env.NEXT_PUBLIC_FIREBASE_VERSION_ID || "gA0R6EoO8Ym89rP4iyhm";
+
+
+export const FetchDataMaintenance = () => {
   const [mobileVersion, setMobileVersion] = useState<MaintenanceProps[]>([]);
 
   const readMaintenanceData = useCallback(async () => {
@@ -52,10 +57,7 @@ export const FetchDataMaintenance = (
   return { mobileVersion, setMobileVersion }; // Return fetched data if needed
 };
 
-export const FetchDataVersion = (
-  docVersionName: string,
-  docVersionId: string
-) => {
+export const FetchDataVersion = () => {
   const [mobileVersion, setMobileVersion] = useState<VersionProps[]>([]);
   const [offlineVersions, setOfflineVersion] = useState<number[]>([]);
 
@@ -100,8 +102,6 @@ export const FetchDataVersion = (
 
 // Function to update maintenance data
 export const updateMaintenanceData = async (
-  docVersionName: string,
-  docVersionId: string,
   updatedApp: { versionName: string; appState: any },
   setData: (val: any) => void
 ) => {
@@ -116,7 +116,7 @@ export const updateMaintenanceData = async (
   }));
 
   try {
-    await updateDoc(doc(db, docVersionName, docVersionId), {
+    await updateDoc(doc(db, docMaintenanceName, docMaintenanceId), {
       [updatedApp.versionName]: updatedApp.appState,
     });
 
@@ -139,8 +139,6 @@ export const updateMaintenanceData = async (
 // Function to update a specific version
 
 export const updateVersion = async (
-  docVersionName: string,
-  docVersionId: string,
   payloadObject: Record<string, any>,
   setData: (val: any) => any,
   versionNumber: number,

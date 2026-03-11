@@ -8,17 +8,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import React, {useState } from "react";
-import VersionUpdates from "./commands/version-updates";
+// import VersionUpdates from "./commands/version-updates";
 import AppMaintenance from "./commands/app-maintenance";
 
 const componentMap: Record<string, React.ComponentType> = {
-  version_updates : VersionUpdates,
+  // version_updates : VersionUpdates,
   app_maintenance : AppMaintenance
 };
 
 const commandLabels: Record<string, string> = {
     app_maintenance : "App Maintenance",
-  version_updates : "Version Updates"
+  // version_updates : "Version Updates"
 };
 
 const MobileCommands = () => {
@@ -30,7 +30,7 @@ const MobileCommands = () => {
 
   const [availableCommands, setAvailableCommands] = useState<string[]>([
        "app_maintenance",
-    "version_updates"
+    // "version_updates"
   ]);
 
 
