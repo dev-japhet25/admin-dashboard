@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { db } from "../../firebase.config";
-import { doc, getDoc,updateDoc } from "firebase/firestore";
-
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 interface MaintenanceProps {
   versionName: string;
@@ -19,19 +18,30 @@ interface MaintenanceProps {
 
 // provided a fallback value for the environment variables if not set
 
-const docMaintenanceName: string = process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_NAME || "maintenance";
-const docMaintenanceId: string =  process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_ID || "TyyHnOOoBdKRQ6sZdLjs";
-const docVersionName: string = process.env.NEXT_PUBLIC_FIREBASE_VERSION_NAME || "versionsTests";
-const docVersionId: string = process.env.NEXT_PUBLIC_FIREBASE_VERSION_ID || "gA0R6EoO8Ym89rP4iyhm";
+const docMaintenanceName: string =
+  process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_NAME || "maintenance";
+const docMaintenanceId: string =
+  process.env.NEXT_PUBLIC_FIREBASE_MAINTENANCE_ID || "TyyHnOOoBdKRQ6sZdLjs";
+const docVersionName: string =
+  process.env.NEXT_PUBLIC_FIREBASE_VERSION_NAME || "versionsTests";
+const docVersionId: string =
+  process.env.NEXT_PUBLIC_FIREBASE_VERSION_ID || "gA0R6EoO8Ym89rP4iyhm";
 
-
-export const FetchDataMaintenance = () => {
+export const FetchDataMaintenance = (
+  data: any,
+  setData: (val: any) => void
+) => {
   const [mobileVersion, setMobileVersion] = useState<MaintenanceProps[]>([]);
 
   const readMaintenanceData = useCallback(async () => {
     if (!docMaintenanceName || !docMaintenanceId) return;
 
     try {
+      setData((prevData: any) => ({
+        ...prevData,
+        loading: true,
+      }));
+      
       const docRef = doc(db, docMaintenanceName, docMaintenanceId);
       const docSnap = await getDoc(docRef);
 
@@ -43,9 +53,22 @@ export const FetchDataMaintenance = () => {
           .map(([versionName, appState]) => ({ versionName, appState }));
 
         setMobileVersion(versionsArray);
+        setData((prevData: any) => ({
+          ...prevData,
+          loading: false,
+        }));
       }
     } catch (error) {
       console.error("Error reading document:", error);
+      setData((prevData: any) => ({
+        ...prevData,
+        loading: false,
+      }));
+    } finally {
+      setData((prevData: any) => ({
+        ...prevData,
+        loading: false,
+      }));
     }
   }, [docMaintenanceName, docMaintenanceId]);
 
@@ -54,7 +77,7 @@ export const FetchDataMaintenance = () => {
     readMaintenanceData();
   }, [readMaintenanceData]);
 
-  return { mobileVersion, setMobileVersion }; // Return fetched data if needed
+  return { mobileVersion, setMobileVersion,readMaintenanceData }; // Return fetched data if needed
 };
 
 export const FetchDataVersion = () => {
@@ -96,9 +119,6 @@ export const FetchDataVersion = () => {
     setOfflineVersion,
   }; // Return fetched data if needed
 };
-
-
-
 
 // Function to update maintenance data
 export const updateMaintenanceData = async (
@@ -170,4 +190,3 @@ export const updateVersion = async (
     return;
   }
 };
-

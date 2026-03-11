@@ -7,7 +7,7 @@ import { FetchDataMaintenance } from "@/lib/firebase-actions";
 import { updateMaintenanceData } from "@/lib/firebase-actions";
 
 const AppMaintenance = () => {
-  const { mobileVersion, setMobileVersion } = FetchDataMaintenance();
+  const [open,setOpen] = useState(true)
   const [data, setData] = useState({
     loading: false,
     isError: false,
@@ -17,12 +17,17 @@ const AppMaintenance = () => {
     toggleIndex: "",
     toggleField: "",
   });
-
+  const { mobileVersion, setMobileVersion,readMaintenanceData } = FetchDataMaintenance(
+    data,
+    setData
+  );
   function onClick() {
     console.log(" I have closed");
     setData((prevData) => ({ ...prevData, open: false, responseMessage: "" }));
     return;
   }
+
+  console.log("error", data);
 
   const TriggerToggleNotification = async (index: any, field: string) => {
     setMobileVersion((prevVersions) => {
@@ -42,10 +47,7 @@ const AppMaintenance = () => {
       newVersions[index] = { ...newVersions[index], [field]: newState };
 
       // Call updateMaintenanceData immediately after updating state
-      updateMaintenanceData(
-        newVersions[index],
-        setData
-      );
+      updateMaintenanceData(newVersions[index], setData);
 
       return newVersions;
     });
@@ -102,7 +104,7 @@ const AppMaintenance = () => {
         </div>
 
         <div className="flex flex-col md:flex-row justify-start flex-wrap p-4 gap-x-2 gap-y-6 w-full">
-          {mobileVersion.length === 0 && <ImageLoader />}
+          {data.loading && <ImageLoader />}
 
           {mobileVersion.map((app, index) => {
             const { title, description }: any =
@@ -154,6 +156,25 @@ const AppMaintenance = () => {
             {
               <div className="my-4 p-4 border rounded-md text-md text-center bg-white text-red-500 border-slate-300">
                 <span className="font-semibold">{data.responseMessage}</span>
+              </div>
+            }
+          </Modal>
+        )}
+
+        {!data.loading && mobileVersion.length < 1 && (
+          <Modal
+            onClick={()=>setOpen(false)}
+            setOpen={setOpen}
+            open={open}
+            modalHead="App Maintenance"
+            actionItems={true} 
+            actionItemText="Retry"
+            actionItemMethod={readMaintenanceData}
+
+          >
+            {
+              <div className="my-4 p-4 border rounded-md text-md text-center bg-white text-red-500 border-slate-300">
+                <span className="font-semibold">There was an error in fetching firebase data please refresh the page again</span>
               </div>
             }
           </Modal>
