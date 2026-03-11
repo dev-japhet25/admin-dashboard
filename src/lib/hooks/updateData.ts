@@ -41,30 +41,37 @@ export const updateMaintenanceData = async (
 
 // Function to update a specific version
 
-export const updateVersion  = async (
+export const updateVersion = async (
   docVersionName: string,
   docVersionId: string,
-  payloadObject : Record<string,any>,
-  setData : (val: any) => any,
-  versionNumber : number,
-  versionName : string,
-   setOfflineVersion : (val :any) => any) => {
-    try {     
-             const docRef = doc(db, docVersionName,docVersionId);
-             const updateSpecficVersion =  await updateDoc(docRef, {...payloadObject});
-             console.log('updateDoc s',updateSpecficVersion)
-               let message = `You have successfully updated version number ${versionNumber} for ${versionName} mobile app`
-                 setData((prevData :any) => ({...prevData,
-                  responseMessage : message , open : true,loading : false ,isError : false}))
-                 setOfflineVersion((offline:any)=> [...offline,Number(versionNumber)])
-           }
-       catch(error: any){
-        console.error("Error updating document:", error);
-         setData((prevData :any) => ({...prevData,
-          responseMessage : JSON.stringify(error.message),
-          isError : false,
-          open : true,
-          loading : false})) 
-        return;  
-           }
-}
+  payloadObject: Record<string, any>,
+  setData: (val: any) => any,
+  versionNumber: number,
+  versionName: string,
+  setOfflineVersion: (val: any) => any
+) => {
+  try {
+    const docRef = doc(db, docVersionName, docVersionId);
+    const updateSpecficVersion = await updateDoc(docRef, { ...payloadObject });
+    console.log("updateDoc s", updateSpecficVersion);
+    let message = `You have successfully updated version number ${versionNumber} for ${versionName} mobile app`;
+    setData((prevData: any) => ({
+      ...prevData,
+      responseMessage: message,
+      open: true,
+      loading: false,
+      isError: false,
+    }));
+    setOfflineVersion((offline: any) => [...offline, Number(versionNumber)]);
+  } catch (error: any) {
+    console.error("Error updating document:", error);
+    setData((prevData: any) => ({
+      ...prevData,
+      responseMessage: JSON.stringify(error.message),
+      isError: false,
+      open: true,
+      loading: false,
+    }));
+    return;
+  }
+};

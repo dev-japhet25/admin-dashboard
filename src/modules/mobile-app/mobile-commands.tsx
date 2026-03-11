@@ -8,8 +8,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import React, {useState } from "react";
-import VersionUpdates from "./commands/version-updates.tsx";
-import AppMaintenance from "./commands/app-maintenance.tsx";
+import VersionUpdates from "./commands/version-updates";
+import AppMaintenance from "./commands/app-maintenance";
 
 const componentMap: Record<string, React.ComponentType> = {
   version_updates : VersionUpdates,
