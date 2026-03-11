@@ -4,8 +4,8 @@ import { Modal } from "@/components/Modal/Modal";
 import ImageLoader from "@/components/Loader/Loader";
 import Button from "@/components/Button";
 import { formatDataVersion } from "@/lib/helpers/format";
-import { FetchDataVersion } from "@/lib/hooks/fetchData";
-import { updateVersion } from "@/lib/hooks/updateData";
+import { FetchDataVersion } from "@/lib/firebase-actions";
+import { updateVersion } from "@/lib/firebase-actions";
 const VersionUpdates = () => {
   let versionDocName = process.env.NEXT_PUBLIC_FIREBASE_VERSION_NAME ?? "";
   let versionDocId =  process.env.NEXT_PUBLIC_FIREBASE_VERSION_ID ?? "";

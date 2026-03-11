@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "@/components/Modal/Modal";
 import ImageLoader from "@/components/Loader/Loader";
 import { formatDataMaintenance } from "@/lib/helpers/format";
-import { FetchDataMaintenance } from "@/lib/hooks/fetchData";
-import { updateMaintenanceData } from "@/lib/hooks/updateData";
+import { FetchDataMaintenance } from "@/lib/firebase-actions";
+import { updateMaintenanceData } from "@/lib/firebase-actions";
 
 const AppMaintenance = () => {
   const { mobileVersion, setMobileVersion } = FetchDataMaintenance(
