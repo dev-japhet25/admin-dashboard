@@ -36,6 +36,8 @@ import Topup from "./commands/topUp";
 import UserToken from "./commands/userToken";
 import UssdCommand from "./commands/ussd";
 import UssdBranchesCommand from "./commands/ussdBranches";
+import FlaggedEmailCommand from "./commands/flaggedEmail";
+import RemoveFlaggedEmailCommand from "./commands/removeFlaggedEmail";
 
 
 const componentMap: Record<string, React.ComponentType> = {
@@ -66,7 +68,9 @@ const componentMap: Record<string, React.ComponentType> = {
   blockUnblock: BlockUnblockCommand,
   insuranceSetup: InsuranceSetupCommand,
   categories: CategoriesCommand,
-  botSetup: BotSetup
+  botSetup: BotSetup,
+  flaggedEmail: FlaggedEmailCommand,
+  removeFlaggedEmail: RemoveFlaggedEmailCommand
 };
 
 const commandLabels: Record<string, string> = {
@@ -97,7 +101,9 @@ const commandLabels: Record<string, string> = {
   blockUnblock: "Block/Unblock",
   insuranceSetup: "Insurance Setup",
   categories: "Categories",
-  botSetup: "Bot Setup"
+  botSetup: "Bot Setup",
+  flaggedEmail: "Flagged Email",
+  removeFlaggedEmail: "Remove Flagged Email"
 };
 
 const SlackCommands = () => {
@@ -129,7 +135,9 @@ const SlackCommands = () => {
     "member_type",
     "branches",
     "sender_id",
-    "setup_chatbot"
+    "setup_chatbot",
+    "flaggedEmail",
+    "removeFlaggedEmail"
   ]);
 
 
