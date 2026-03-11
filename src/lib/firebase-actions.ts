@@ -57,6 +57,7 @@ export const FetchDataMaintenance = (
           ...prevData,
           loading: false,
         }));
+        return;
       }
     } catch (error) {
       console.error("Error reading document:", error);
@@ -64,11 +65,13 @@ export const FetchDataMaintenance = (
         ...prevData,
         loading: false,
       }));
+      return;
     } finally {
       setData((prevData: any) => ({
         ...prevData,
         loading: false,
       }));
+      return;
     }
   }, [docMaintenanceName, docMaintenanceId]);
 

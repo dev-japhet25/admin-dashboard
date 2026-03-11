@@ -5,9 +5,10 @@ import ImageLoader from "@/components/Loader/Loader";
 import { formatDataMaintenance } from "@/lib/helpers/format";
 import { FetchDataMaintenance } from "@/lib/firebase-actions";
 import { updateMaintenanceData } from "@/lib/firebase-actions";
+import Button from "@/components/Button";
 
 const AppMaintenance = () => {
-  const [open,setOpen] = useState(true)
+  const [open, setOpen] = useState(true);
   const [data, setData] = useState({
     loading: false,
     isError: false,
@@ -17,17 +18,13 @@ const AppMaintenance = () => {
     toggleIndex: "",
     toggleField: "",
   });
-  const { mobileVersion, setMobileVersion,readMaintenanceData } = FetchDataMaintenance(
-    data,
-    setData
-  );
+  const { mobileVersion, setMobileVersion, readMaintenanceData } =
+    FetchDataMaintenance(data, setData);
   function onClick() {
     console.log(" I have closed");
     setData((prevData) => ({ ...prevData, open: false, responseMessage: "" }));
     return;
   }
-
-  console.log("error", data);
 
   const TriggerToggleNotification = async (index: any, field: string) => {
     setMobileVersion((prevVersions) => {
@@ -163,24 +160,42 @@ const AppMaintenance = () => {
 
         {!data.loading && mobileVersion.length < 1 && (
           <Modal
-            onClick={()=>setOpen(false)}
+            onClick={() => setOpen(false)}
             setOpen={setOpen}
             open={open}
             modalHead="App Maintenance"
-            actionItems={true} 
+            actionItems={true}
             actionItemText="Retry"
             actionItemMethod={readMaintenanceData}
-
           >
             {
               <div className="my-4 p-4 border rounded-md text-md text-center bg-white text-red-500 border-slate-300">
-                <span className="font-semibold">There was an error in fetching firebase data please refresh the page again</span>
+                <span className="font-semibold">
+                  There was an error in fetching firebase data please refresh
+                  the page again
+                </span>
               </div>
             }
           </Modal>
         )}
 
         {data.loading && <ImageLoader />}
+      
+
+        {!data.loading && mobileVersion.length < 1 && (
+          <div className="flex flex-col items-center justify-center min-h-[300px]">
+            <div className="my-4  text-md text-center bg-white text-red-500">
+              <span className="font-medium">Sorry an error occurred, Try again later. </span>
+            </div>
+            <a
+              href=""
+              onClick={()=>readMaintenanceData()}
+              className="text-center text-sm bg-red-500 text-white px-4 py-2 rounded font-medium"
+            >
+              Click to Refresh
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

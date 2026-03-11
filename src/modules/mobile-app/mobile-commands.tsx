@@ -51,7 +51,7 @@ const MobileCommands = () => {
   return (
     <div className="container mx-auto mt-5 p-4">
       <div className="mx-auto">
-        <label
+        {/* <label
           htmlFor="command-select"
           className="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-100"
         >
@@ -68,11 +68,11 @@ const MobileCommands = () => {
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+        </Select> */}
 
         <Card className="mt-8">
           <CardContent className="p-6 min-h-[300px]">
-            {SelectedComponent && <SelectedComponent />}
+           <AppMaintenance/>
           </CardContent>
         </Card>
       </div>

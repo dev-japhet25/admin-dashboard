@@ -6,24 +6,24 @@ export { isObject };
 
 const maintenanceApps = {
   bs: {
-    title: "Bible Society Andrioid",
-    description: "Bible Society Andrioid",
+    title: "Bible Society Android",
+    description: "Bible Society Android",
   },
   lsi: {
-    title: "LSI Andrioid",
-    description: "LSI Andrioid",
+    title: "LSI Android",
+    description: "LSI Android",
   },
   icgc: {
     title: "ICGC Andrioid",
-    description: "ICGC Andrioid",
+    description: "ICGC Android",
   },
   gw: {
-    title: "Greater Works Andrioid",
-    description: "Greater Works Andrioid",
+    title: "Greater Works Android",
+    description: "Greater Works Android",
   },
   vanilla: {
-    title: "Vanilla Andrioid",
-    description: "Vanilla Andrioid",
+    title: "Asoriba android",
+    description: "Asoriba android",
   },
   lsiIos: {
     title: "LSI Ios",
@@ -42,8 +42,8 @@ const maintenanceApps = {
     description: "Greater Works Ios",
   },
   vanillaIos: {
-    title: "Vanilla Ios",
-    description: "Vanilla Ios",
+    title: "Asoriba Ios",
+    description: "Asoriba Ios",
   },
 };
 
@@ -65,8 +65,8 @@ const versionApps = {
     description: "LSI Android",
   },
   vanillaVersion: {
-    title: "Vanilla Android",
-    description: "Vanilla Android",
+    title: "Asoriba android",
+    description: "Asoriba android",
   },
   iosGwVersion: {
     title: "Greater Works Ios",
@@ -77,8 +77,8 @@ const versionApps = {
     description: "LSI Ios",
   },
   iosVanillaVersion: {
-    title: "Vanilla Ios",
-    description: "Vanilla Ios",
+    title: "Asoriba Ios",
+    description: "Asoriba Ios",
   },
   iosIcgcVersion: {
     title: "ICGC Ios",
