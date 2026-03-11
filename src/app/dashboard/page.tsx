@@ -2,7 +2,7 @@
 
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Home, UserX } from "lucide-react";
+import { Home, UserX,Phone } from "lucide-react";
 import Link from "next/link";
 import { RiSlackFill } from 'react-icons/ri';
 import { TbDeviceHeartMonitor } from 'react-icons/tb';
@@ -25,6 +25,13 @@ const Dashboard = () => {
         "Manage and monitor custom Slack commands for improved team communication.",
       icon: RiSlackFill,
       href: "/slack",
+    },
+ {
+      title: "Mobile Commands",
+      description:
+        "Manage mobile app updates",
+      icon: Phone,
+      href: "/mobile-app",
     },
     {
       title: "USSD Monitor",

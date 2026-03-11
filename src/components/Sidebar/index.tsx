@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { Home, UserX,Phone } from "lucide-react";
 import Image from 'next/image'
 import { RiHome5Line, RiSlackFill,RiMoneyDollarCircleLine } from 'react-icons/ri'
 import { TbDeviceHeartMonitor } from 'react-icons/tb'
@@ -28,10 +29,16 @@ const menuItems: MenuItem[] = [
     route: "/slack",
   },
   {
+    name: "Mobile Commands",
+    icon: <Phone className="text-lg" />,
+    route: "/mobile-app",
+  },
+  {
     name: "Payment Commands",
     icon: <RiMoneyDollarCircleLine className="text-lg" />,
     route: "/payment",
   },
+
   {
     name: "USSD Monitor",
     icon: <TbDeviceHeartMonitor className="text-lg" />,
