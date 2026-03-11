@@ -8,9 +8,9 @@ import { FetchDataVersion } from "@/lib/hooks/fetchData";
 import { updateVersion } from "@/lib/hooks/updateData";
 const VersionUpdates = () => {
 
-   let versionName = 'versionsTests';
-   let versionId = 'gA0R6EoO8Ym89rP4iyhm';
-  const {mobileVersion,setMobileVersion,offlineVersions ,setOfflineVersion} = FetchDataVersion(versionName,versionId)
+   let versionDocName = 'versionsTests';
+   let versionDocId = 'gA0R6EoO8Ym89rP4iyhm';
+  const {mobileVersion,setMobileVersion,offlineVersions ,setOfflineVersion} = FetchDataVersion(versionDocName,versionDocId)
  
   const [data,setData] = useState({
     loading : false,
@@ -67,11 +67,11 @@ const VersionUpdates = () => {
   console.log('finally formatted',updatedVersionsObject)
    
      
-   versionName = 'versionsTests';
-   versionId = 'gA0R6EoO8Ym89rP4iyhm';
+   versionDocName = 'versionsTests';
+   versionDocId = 'gA0R6EoO8Ym89rP4iyhm';
    
 
-   updateVersion(versionName,versionId,updatedVersionsObject,setData,versionNumber,versionName,setOfflineVersion)
+   updateVersion(versionDocName,versionDocId,updatedVersionsObject,setData,versionNumber,versionName,setOfflineVersion)
           
 }
 

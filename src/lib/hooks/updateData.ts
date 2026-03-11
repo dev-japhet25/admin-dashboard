@@ -1,52 +1,45 @@
-import { doc,updateDoc, } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase.config";
 
+// Function to update maintenance data
+export const updateMaintenanceData = async (
+  docVersionName: string,
+  docVersionId: string,
+  updatedApp: { versionName: string; appState: any },
+  setData: (val: any) => void
+) => {
+  if (!updatedApp) return;
 
-
- export const updateMaintenanceData = async (
-   docVersionName: string,
-   docVersionId: string,
-   updatedApp : any,
-   setData : (val: any) => any
-  ) => {
-  if (!updatedApp) return; // Prevent unnecessary API calls
-
-  console.log("Push this data:", updatedApp);
-  // Show loading before making the API call
-    setData((prevData :any) => ({ ...prevData, 
-      loading: true,
-      open: false,
-      actionItem: false,
-      responseMessage: ""}));
+  setData((prev: any) => ({
+    ...prev,
+    loading: true,
+    open: false,
+    actionItem: false,
+    responseMessage: "",
+  }));
 
   try {
-    const docRef = doc(db,docVersionName, docVersionId);
+    await updateDoc(doc(db, docVersionName, docVersionId), {
+      [updatedApp.versionName]: updatedApp.appState,
+    });
 
-    // Prepare the update object
-    const updateData = { [updatedApp.versionName]: updatedApp.appState };
-    await updateDoc(docRef, updateData);
-    console.log("Document successfully updated:", updateData);
-    // Set success response & actionItem only if API call was successful
-     setData((prevData: any) => ({ ...prevData,
-       responseMessage: `You have updated maintenance mode for the ${updatedApp.versionName} app`
-       ,open: true ,
-      actionItem : false ,
-    loading : false}));
-    } catch (error) {
-    console.error("Error updating maintenance data:", error);
-    // Set error response & actionItem only if API call failed
-    setData((prevData : any) => ({ ...prevData, 
+    setData((prev: any) => ({
+      ...prev,
+      responseMessage: `You have successfully updated maintenance mode for ${updatedApp.versionName}`,
       open: true,
-       loading: false,
-       actionItem : false,
-      responseMessage : "Sorry, an error occurred"
-     }));
+      loading: false,
+    }));
+  } catch (error) {
+    setData((prev: any) => ({
+      ...prev,
+      open: true,
+      loading: false,
+      responseMessage: "An error occurred while updating maintenance data",
+    }));
   }
-
 };
 
-
-
+// Function to update a specific version
 
 export const updateVersion  = async (
   docVersionName: string,

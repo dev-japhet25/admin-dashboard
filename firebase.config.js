@@ -12,14 +12,14 @@ const firebaseConfig = {
 
 // Secondary Firebase config
 const secondaryConfig = {
-  apiKey: "AIzaSyCqVXsM0EJzaU4JwXaziIL018JAUXr46ek",
-  authDomain: "asoriba-android-f7975.firebaseapp.com",
-  databaseURL: "https://asoriba-android-f7975.firebaseio.com",
-  projectId: "asoriba-android-f7975",
-  storageBucket: "asoriba-android-f7975.appspot.com",
-  messagingSenderId: "910739823840",
-  appId: "1:910739823840:web:640410c7a1986f9bf6c485",
-  measurementId: "G-XLDRSV3ZLS"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY_SECONDARY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN_SECONDARY,
+  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL_SECONDARY,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID_SECONDARY,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET_SECONDARY,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID_SECONDARY,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID_SECONDARY,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID_SECONDARY
 };
 
 // Initialize the default Firebase app

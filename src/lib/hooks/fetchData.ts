@@ -1,7 +1,7 @@
 
 import { useEffect,useState,useCallback} from "react";
 import { db } from "../../../firebase.config";
-import { doc, getDoc,updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 interface MaintenanceProps {
     versionName : string,
@@ -13,86 +13,76 @@ interface MaintenanceProps {
     versionName : string ,
     versionNumber : number 
    }
+   interface MaintenanceProps {
+     versionName: string;
+     appState: boolean;
+   }
+   
+   export const FetchDataMaintenance = (
+     docMaintenanceName: string,
+     docMaintenanceId: string
+   ) => {
+     const [mobileVersion, setMobileVersion] = useState<MaintenanceProps[]>([]);
+   
+     const readMaintenanceData = useCallback(async () => {
+       if (!docMaintenanceName || !docMaintenanceId) return;
+   
+       try {
+         const docRef = doc(db, docMaintenanceName, docMaintenanceId);
+         const docSnap = await getDoc(docRef);
+   
+         if (docSnap.exists()) {
+           console.log("Document Data:", docSnap.data());
+   
+           const versionsArray: MaintenanceProps[] = Object.entries(docSnap.data())
+             .filter(([_, value]) => typeof value === "boolean")
+             .map(([versionName, appState]) => ({ versionName, appState }));
+   
+           setMobileVersion(versionsArray);
+         }
+       } catch (error) {
+         console.error("Error reading document:", error);
+       }
+     }, [docMaintenanceName, docMaintenanceId]);
+   
+     useEffect(() => {
+      console.log("Fetching maintenance data");
+       readMaintenanceData();
+     }, [readMaintenanceData]);
+   
+     return {mobileVersion,setMobileVersion } // Return fetched data if needed
+   };
+   
 
-export const FetchDataMaintenance = ( docMaintenanceName: string , docMaintenanceId: string) => {
-       const [mobileVersion,setMobileVersion] = useState<MaintenanceProps[]>([])
-
-
-    const readMaintenanceData = useCallback(async () => {
-      try {  
-        const docRef = doc(db,docMaintenanceName, docMaintenanceId);
+   export const FetchDataVersion = (docVersionName: string, docVersionId: string) => {
+    const [mobileVersion, setMobileVersion] = useState<VersionProps[]>([]);
+    const [offlineVersions, setOfflineVersion] = useState<number[]>([]);
+  
+    const readVersionsData = useCallback(async () => {
+      try {
+        const docRef = doc(db, docVersionName, docVersionId);
         const docSnap = await getDoc(docRef);
-    
+  
         if (docSnap.exists()) {
           console.log("Document Data:", docSnap.data());
-    
-          const versionsArray : any[] = []
-          Object.entries(docSnap.data()).forEach(([verName, verNumber]) => {
-         if (typeof verNumber === 'boolean') {
-             versionsArray.push({
-                 versionName: verName,
-                 appState: verNumber
-             });
-         }
-     });
+  
+          const versionsArray = Object.entries(docSnap.data()).map(([versionName, versionNumber]) => ({
+            versionName,
+            versionNumber: Number(versionNumber), // Ensures numbers are properly formatted
+          }));
+  
           setMobileVersion(versionsArray);
+          setOfflineVersion(versionsArray.map((v) => v.versionNumber));
         }
       } catch (error) {
         console.error("Error reading document:", error);
       }
-    },[]);
-    
+    }, [docVersionName, docVersionId]);
+  
     useEffect(() => {
-      console.log("Component mounted or re-rendered");
-      console.log('my mobile versions',mobileVersion,open)
-      readMaintenanceData();
-    }, [readMaintenanceData]);
-
-
-    return {mobileVersion,setMobileVersion};
-}
-
-
-
-export const FetchDataVersion = (docVersionName : string, docVersionId :string) => {
-const [mobileVersion,setMobileVersion] = useState<VersionProps[]>([])
-     const [offlineVersions,setOfflineVersion] = useState<number[]>([])
-// Call the function
-
-useEffect(() => {
-  let isMounted = true; // To prevent state updates if the component unmounts
-
-  const readVersionsData = async () => {
-    try {
-      const docRef = doc(db, docVersionName, docVersionId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists() && isMounted) {
-        console.log("Document Data:", docSnap.data());
-
-        const versionsArray = Object.entries(docSnap.data()).map(([verName, verNumber]) => ({
-          versionName: verName,
-          versionNumber: verNumber
-        }));
-
-        const offlineArray = versionsArray.map(v => v.versionNumber);
-
-        setMobileVersion(versionsArray);
-        setOfflineVersion(offlineArray);
-      }
-    } catch (error) {
-      console.error("Error reading document:", error);
-    }
+      console.log("Fetching version data");
+      readVersionsData();
+    }, [readVersionsData]);
+  
+    return { mobileVersion, offlineVersions,setMobileVersion,setOfflineVersion }; // Return fetched data if needed
   };
-
-  readVersionsData();
-
-  return () => {
-    isMounted = false; 
-    setMobileVersion([]); 
-    setOfflineVersion([]);
-  };
-}, []);
-
-    return {mobileVersion,offlineVersions,setMobileVersion,setOfflineVersion};
-}
